@@ -14,7 +14,7 @@ import ro.space.util.algebra.Calculator;
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
-
+// test comment
 public class Particle implements Comparable<Particle> {
 
   private GL2 gl;
