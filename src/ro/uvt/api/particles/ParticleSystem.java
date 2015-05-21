@@ -1,5 +1,5 @@
 
-package ro.space.display.particles;
+package ro.uvt.api.particles;
 
 import static javax.media.opengl.GL.GL_BLEND;
 
@@ -11,8 +11,8 @@ import java.util.ListIterator;
 
 import javax.media.opengl.GL2;
 
-import ro.uvt.observer.Observer;
-import ro.uvt.observer.Subject;
+import ro.uvt.api.util.Observer;
+import ro.uvt.api.util.Subject;
 
 public abstract class ParticleSystem implements Observer {
 

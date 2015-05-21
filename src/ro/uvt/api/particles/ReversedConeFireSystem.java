@@ -1,41 +1,42 @@
 
-package ro.space.display.particles;
+package ro.uvt.api.particles;
 
 import javax.media.opengl.GL2;
 
-import ro.space.read.textures.TextureReader;
-import ro.space.util.algebra.Calculator;
-import ro.space.util.constants.Numbers;
+import ro.uvt.api.util.Calculator;
 
 import com.jogamp.opengl.util.texture.Texture;
 
 public class ReversedConeFireSystem extends ParticleSystem {
 
-  private TextureReader reader;
-
   private Trio source;
   private Trio destination;
   private float radius;
-
-  public ReversedConeFireSystem(GL2 gl, Trio eye, double cameraAngle, Trio source, Trio destination, float radius) {
-    super(eye, cameraAngle);
-
-    this.gl = gl;
-    reader = new TextureReader(this.gl, "res/");
-
-    this.source = source;
-    this.destination = destination;
-    this.radius = radius;
-  }
 
   private Trio particleStartPosition = null;
   private Trio particleStartSpeed = null;
   private Trio particleAcceleration = null;
 
-  protected void spawnParticles() {
-    Texture texture = reader.readTexture("particle.png", ".png");
+  private int pps;
 
-    for (int i = 0; i < Numbers.NUMBER_OF_PARTICLES.getValue(); ++i) {
+  private Texture texture;
+
+  public ReversedConeFireSystem(GL2 gl, Trio eye, double cameraAngle, Trio source, Trio destination, float radius, int pps, Texture texture) {
+    super(eye, cameraAngle);
+
+    this.gl = gl;
+
+    this.source = source;
+    this.destination = destination;
+    this.radius = radius;
+
+    this.pps = pps;
+
+    this.texture = texture;
+  }
+
+  protected void spawnParticles() {
+    for (int i = 0; i < pps; ++i) {
 
       particleStartSpeed = new Trio(0.0f, 0.0f, 0.0f);
 
@@ -56,9 +57,9 @@ public class ReversedConeFireSystem extends ParticleSystem {
 
     Trio pointInFirstSphere = Calculator.add(source, new Trio(xVal, yVal, zVal));
     particleStartPosition = pointInFirstSphere;
-    
+
     Trio directionVector = Calculator.subtract(destination, pointInFirstSphere);
-    
+
     particleAcceleration = Calculator.makeItSmaller(directionVector, 450f);
   }
 }

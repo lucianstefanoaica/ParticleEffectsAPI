@@ -1,5 +1,5 @@
 
-package ro.space.display.particles;
+package ro.uvt.api.particles;
 
 import static javax.media.opengl.GL.GL_FRONT;
 import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
@@ -10,11 +10,11 @@ import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 import javax.media.opengl.GL2;
 
-import ro.space.util.algebra.Calculator;
+import ro.uvt.api.util.Calculator;
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
-// test comment
+
 public class Particle implements Comparable<Particle> {
 
   private GL2 gl;

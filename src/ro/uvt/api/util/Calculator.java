@@ -1,9 +1,9 @@
 
-package ro.space.util.algebra;
+package ro.uvt.api.util;
 
 import java.util.Random;
 
-import ro.space.display.particles.Trio;
+import ro.uvt.api.particles.Trio;
 
 public class Calculator {
 

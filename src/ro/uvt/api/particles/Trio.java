@@ -1,5 +1,5 @@
 
-package ro.space.display.particles;
+package ro.uvt.api.particles;
 
 public class Trio {
 

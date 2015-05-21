@@ -1,46 +1,46 @@
 
-package ro.space.display.particles;
+package ro.uvt.api.particles;
 
 import javax.media.opengl.GL2;
 
-import ro.space.read.textures.TextureReader;
-import ro.space.util.algebra.Calculator;
-import ro.space.util.constants.Numbers;
+import ro.uvt.api.util.Calculator;
 
 import com.jogamp.opengl.util.texture.Texture;
 
 public class SprayedFireSystem extends ParticleSystem {
 
-  private TextureReader reader;
-
-  // private Random generator = new Random();
-
   private Trio source;
   private Trio destination;
   private float radius;
 
-  public SprayedFireSystem(GL2 gl, Trio eye, double cameraAngle, Trio source, Trio destination, float radius) {
+  private int pps;
+
+  private Texture texture;
+
+  public SprayedFireSystem(GL2 gl, Trio eye, double cameraAngle, Trio source, Trio destination, float radius, int pps, Texture texture) {
     super(eye, cameraAngle);
 
     this.gl = gl;
-    reader = new TextureReader(this.gl, "res/");
 
     this.source = source;
     this.destination = destination;
     this.radius = radius;
+
+    this.pps = pps;
+
+    this.texture = texture;
   }
 
   protected void spawnParticles() {
-
-    Texture texture = reader.readTexture("particle.png", ".png");
-
-    for (int i = 0; i < Numbers.NUMBER_OF_PARTICLES.getValue(); ++i) {
+    for (int i = 0; i < pps; ++i) {
 
       Trio loc = source.clone();
       Trio speed = new Trio(0.0f, 0.0f, 0.0f);
 
       Trio acceleration = generateParticleDirectionVector();
       // new Trio(1.0f / generator.nextInt(1000), 1.0f / generator.nextInt(1000), 1.0f / generator.nextInt(1000));
+
+      texture.bind(gl);
 
       Particle particle = new Particle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture);
 
@@ -60,6 +60,6 @@ public class SprayedFireSystem extends ParticleSystem {
     Trio smallerDirectionVector = Calculator.makeItSmaller(directionVector, 400f);
     // Calculator.normalize(directionVector);
 
-    return smallerDirectionVector ;
+    return smallerDirectionVector;
   }
 }

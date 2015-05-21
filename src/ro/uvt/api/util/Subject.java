@@ -1,5 +1,5 @@
 
-package ro.uvt.observer;
+package ro.uvt.api.util;
 
 import java.util.HashMap;
 
