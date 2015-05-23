@@ -13,14 +13,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 
 import javax.media.opengl.GL2;
 
-import com.jogamp.opengl.util.texture.Texture;
-
 import ro.uvt.api.util.Observer;
 import ro.uvt.api.util.Subject;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 public abstract class ParticleSystem implements Observer {
 
@@ -34,24 +33,22 @@ public abstract class ParticleSystem implements Observer {
   protected Trio destination;
   protected float systemRadius = 3.0f;
   protected float particleRadius = 0.08f;
-  private Map<String, float[]> materialProperties = new HashMap<String, float[]>();
+  private Material material;
 
-  protected ParticleSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture) {
+  protected ParticleSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture, Material material) {
     this.gl = gl;
     this.source = source;
     this.destination = destination;
     this.cameraPosition = cameraPosition;
     this.texture = texture;
+    this.material = material;
+  }
 
-    float[] ambient = {0.0f, 0.2f, 0.3f};
-    float[] diffuse = {0.0f, 0.2f, 0.3f};
-    float[] specular = {0.0f, 0.2f, 0.3f};
-    float[] shine = {120.078431f};
-
-    materialProperties.put("ambient", ambient);
-    materialProperties.put("diffuse", diffuse);
-    materialProperties.put("specular", specular);
-    materialProperties.put("shine", shine);
+  protected void enableMaterial() {
+    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.getKd(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.getKs(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, material.getKa(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_SHININESS, material.getNs(), 0);
   }
 
   protected abstract void spawnParticles();
@@ -93,13 +90,6 @@ public abstract class ParticleSystem implements Observer {
     }
   }
 
-  private void enableMaterial() {
-    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, materialProperties.get("ambient"), 0);
-    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, materialProperties.get("diffuse"), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, materialProperties.get("specular"), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SHININESS, materialProperties.get("shine"), 0);
-  }
-
   public Texture getTexture() {
     return texture;
   }
@@ -130,13 +120,5 @@ public abstract class ParticleSystem implements Observer {
 
   public void setParticleRadius(float particleRadius) {
     this.particleRadius = particleRadius;
-  }
-
-  public Map<String, float[]> getMaterialProperties() {
-    return materialProperties;
-  }
-
-  public void setMaterialProperties(Map<String, float[]> materialProperties) {
-    this.materialProperties = materialProperties;
   }
 }

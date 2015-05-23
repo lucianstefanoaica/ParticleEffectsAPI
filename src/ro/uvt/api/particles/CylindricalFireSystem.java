@@ -13,8 +13,8 @@ public class CylindricalFireSystem extends ParticleSystem {
   private Trio startSpeed = null;
   private Trio acceleration = null;
 
-  public CylindricalFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture) {
-    super(gl, source, destination, cameraPosition, texture);
+  public CylindricalFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
+    super(gl, source, destination, cameraPosition, texture, material);
   }
 
   protected void spawnParticles() {

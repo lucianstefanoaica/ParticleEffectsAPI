@@ -13,8 +13,8 @@ public class ReversedConeFireSystem extends ParticleSystem {
   private Trio startSpeed = null;
   private Trio acceleration = null;
 
-  public ReversedConeFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture) {
-    super(gl, source, destination, cameraPosition, texture);
+  public ReversedConeFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
+    super(gl, source, destination, cameraPosition, texture, material);
   }
 
   protected void spawnParticles() {
