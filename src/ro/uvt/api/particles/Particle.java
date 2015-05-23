@@ -1,12 +1,7 @@
 
 package ro.uvt.api.particles;
 
-import static javax.media.opengl.GL.GL_FRONT;
 import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 import javax.media.opengl.GL2;
 
@@ -28,14 +23,14 @@ public class Particle implements Comparable<Particle> {
 
   private Trio cameraPosition;
 
-  private double cameraAngle;
+  private double cameraAngle = 0.0f;
 
   private Trio speed;
   private Trio acceleration;
 
   private float lifespan;
 
-  private float particleRadius = 0.08f;
+  private float particleRadius;
 
   private double cameraDistance;
 
@@ -43,12 +38,10 @@ public class Particle implements Comparable<Particle> {
 
   private float fadeUnit;
 
-  // private Random rand = new Random();
-
-  public Particle(GL2 gl, Trio particlePosition, Trio speed, Trio acceleration, Trio cameraPosition, double cameraAngle, Texture texture) {
+  public Particle(GL2 gl, Trio particlePosition, Trio speed, Trio acceleration, Trio cameraPosition, double cameraAngle, Texture texture, float particleRadius) {
     this.particlePosition = particlePosition;
-
-    computeCornerCoordinates(this.particlePosition, particleRadius);
+    this.particleRadius = particleRadius;
+    computeCornerCoordinates(this.particlePosition, this.particleRadius);
 
     this.speed = speed;
     this.acceleration = acceleration;
@@ -56,8 +49,7 @@ public class Particle implements Comparable<Particle> {
     this.cameraPosition = cameraPosition;
     this.cameraAngle = cameraAngle;
 
-    fadeUnit = 0.05f; 
-    // rand.nextInt(100) / 1000.0f + 0.003f;
+    fadeUnit = 0.05f;
 
     lifespan = 1.0f;
 
@@ -78,7 +70,6 @@ public class Particle implements Comparable<Particle> {
     computeCornerCoordinates(particlePosition, particleRadius);
     computeCameraDistance();
 
-    enableMaterial();
     gl.glColor4f(0.0f, 0.0f, 0.0f, lifespan);
     drawCorners();
   }
@@ -163,19 +154,8 @@ public class Particle implements Comparable<Particle> {
     gl.glPopMatrix();
   }
 
-  private void enableMaterial() {
-    float[] ambient = {0.0f, 0.2f, 0.3f};
-    float[] diffuse = {0.0f, 0.2f, 0.3f};
-    float[] specular = {0.0f, 0.2f, 0.3f};
-    float[] shine = {120.078431f};
-
-    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse, 0);
-    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, specular, 0);
-    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, ambient, 0);
-    gl.glMaterialfv(GL_FRONT, GL_SHININESS, shine, 0);
-  }
-
   private void computeCameraDistance() {
+    //    Don`t know if I will ever need this code, but i will keep it commented here just in case
     //    Trio planeCameraVector = Calculator.subtract(cameraPosition, particlePosition);
     //
     //    Trio pb = Calculator.subtract(rightTop, particlePosition);
@@ -192,9 +172,5 @@ public class Particle implements Comparable<Particle> {
 
   public void setCameraAngle(double cameraAngle) {
     this.cameraAngle = cameraAngle;
-  }
-
-  public double getCameraDistance() {
-    return cameraDistance;
   }
 }

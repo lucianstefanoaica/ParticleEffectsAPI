@@ -9,57 +9,37 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class ReversedConeFireSystem extends ParticleSystem {
 
-  private Trio source;
-  private Trio destination;
-  private float radius;
+  private Trio startPosition = null;
+  private Trio startSpeed = null;
+  private Trio acceleration = null;
 
-  private Trio particleStartPosition = null;
-  private Trio particleStartSpeed = null;
-  private Trio particleAcceleration = null;
-
-  private int pps;
-
-  private Texture texture;
-
-  public ReversedConeFireSystem(GL2 gl, Trio eye, double cameraAngle, Trio source, Trio destination, float radius, int pps, Texture texture) {
-    super(eye, cameraAngle);
-
-    this.gl = gl;
-
-    this.source = source;
-    this.destination = destination;
-    this.radius = radius;
-
-    this.pps = pps;
-
-    this.texture = texture;
+  public ReversedConeFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture) {
+    super(gl, source, destination, cameraPosition, texture);
   }
 
   protected void spawnParticles() {
-    for (int i = 0; i < pps; ++i) {
+    for (int i = 0; i < particlesPerSpawn; ++i) {
 
-      particleStartSpeed = new Trio(0.0f, 0.0f, 0.0f);
+      startSpeed = new Trio(0.0f, 0.0f, 0.0f);
 
       generateParticleDirectionVector();
 
-      // new Trio(1.0f / generator.nextInt(1000), 1.0f / generator.nextInt(1000), 1.0f / generator.nextInt(1000));
-
-      Particle particle = new Particle(gl, particleStartPosition, particleStartSpeed, particleAcceleration, cameraPosition, cameraAngle, texture);
+      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius);
 
       particles.add(particle);
     }
   }
 
   private void generateParticleDirectionVector() {
-    double xVal = Calculator.getRandomNumberInRange(-radius, radius);
-    double yVal = Calculator.getRandomNumberInRange(-radius, radius);
-    double zVal = Calculator.getRandomNumberInRange(-radius, radius);
+    double xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
+    double yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
+    double zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
 
     Trio pointInFirstSphere = Calculator.add(source, new Trio(xVal, yVal, zVal));
-    particleStartPosition = pointInFirstSphere;
+    startPosition = pointInFirstSphere;
 
     Trio directionVector = Calculator.subtract(destination, pointInFirstSphere);
 
-    particleAcceleration = Calculator.makeItSmaller(directionVector, 450f);
+    acceleration = Calculator.makeItSmaller(directionVector, 450f);
   }
 }
