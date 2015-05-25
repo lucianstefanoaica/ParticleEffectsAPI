@@ -23,8 +23,6 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public abstract class ParticleSystem implements Observer {
 
-  // TODO add setter for the fade unit
-
   protected GL2 gl;
   protected List<Particle> particles = new ArrayList<>();
   protected Texture texture;

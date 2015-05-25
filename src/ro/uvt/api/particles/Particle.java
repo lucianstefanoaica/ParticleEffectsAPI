@@ -26,7 +26,7 @@ public class Particle implements Comparable<Particle> {
   private double cameraAngle = 0.0f;
 
   private Trio speed;
-  private Trio acceleration;
+  protected Trio acceleration;
 
   private float lifespan;
 
