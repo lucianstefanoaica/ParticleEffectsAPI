@@ -38,9 +38,9 @@ public class Particle implements Comparable<Particle> {
 
   private float fadeUnit;
 
-  public Particle(GL2 gl, Trio particlePosition, Trio speed, Trio acceleration, Trio cameraPosition, double cameraAngle, Texture texture, float particleRadius) {
-    this.particlePosition = particlePosition;
-    this.particleRadius = particleRadius;
+  public Particle(GL2 gl, Trio position, Trio speed, Trio acceleration, Trio cameraPosition, double cameraAngle, Texture texture, float radius, float fade) {
+    this.particlePosition = position;
+    this.particleRadius = radius;
     computeCornerCoordinates(this.particlePosition, this.particleRadius);
 
     this.speed = speed;
@@ -49,7 +49,7 @@ public class Particle implements Comparable<Particle> {
     this.cameraPosition = cameraPosition;
     this.cameraAngle = cameraAngle;
 
-    fadeUnit = 0.05f;
+    fadeUnit = fade;
 
     lifespan = 1.0f;
 

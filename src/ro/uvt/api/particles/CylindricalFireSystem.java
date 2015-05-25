@@ -24,8 +24,7 @@ public class CylindricalFireSystem extends ParticleSystem {
 
       generateParticleDirectionVector();
 
-      Particle particle =
-        new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius);
+      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
 
       particles.add(particle);
     }

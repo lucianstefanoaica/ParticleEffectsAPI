@@ -21,7 +21,7 @@ public class SprayedFireSystem extends ParticleSystem {
 
       Trio acceleration = generateParticleDirectionVector();
 
-      Particle particle = new Particle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius);
+      Particle particle = new Particle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
 
       particles.add(particle);
     }

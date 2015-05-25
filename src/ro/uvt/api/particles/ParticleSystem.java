@@ -23,6 +23,8 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public abstract class ParticleSystem implements Observer {
 
+  // TODO add setter for the fade unit
+
   protected GL2 gl;
   protected List<Particle> particles = new ArrayList<>();
   protected Texture texture;
@@ -34,6 +36,7 @@ public abstract class ParticleSystem implements Observer {
   protected float systemRadius = 3.0f;
   protected float particleRadius = 0.08f;
   private Material material;
+  protected float fadeUnit = 0.05f;
 
   protected ParticleSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture, Material material) {
     this.gl = gl;
@@ -120,5 +123,13 @@ public abstract class ParticleSystem implements Observer {
 
   public void setParticleRadius(float particleRadius) {
     this.particleRadius = particleRadius;
+  }
+
+  public float getFadeUnit() {
+    return fadeUnit;
+  }
+
+  public void setFadeUnit(float fadeUnit) {
+    this.fadeUnit = fadeUnit;
   }
 }
