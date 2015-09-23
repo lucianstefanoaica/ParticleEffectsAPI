@@ -9,8 +9,9 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class SprayedFireSystem extends ParticleSystem {
 
-  public SprayedFireSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture, Material material) {
+  public SprayedFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
     super(gl, source, destination, cameraPosition, texture, material);
+    this.systemRadius = systemRadius;
   }
 
   protected void spawnParticles() {

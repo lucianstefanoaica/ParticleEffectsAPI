@@ -9,8 +9,9 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class FountainSystem extends ParticleSystem {
 
-  public FountainSystem(GL2 gl, Trio source, Trio up, Trio cameraPosition, Texture texture, Material material) {
+  public FountainSystem(GL2 gl, Trio source, Trio up, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
     super(gl, source, up, cameraPosition, texture, material);
+    this.systemRadius = systemRadius;
   }
 
   protected void spawnParticles() {

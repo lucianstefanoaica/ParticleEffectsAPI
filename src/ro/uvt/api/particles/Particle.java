@@ -106,6 +106,7 @@ public class Particle implements Comparable<Particle> {
     Trio positiveSin = new Trio(0.0f, 0.0f, sinSize);
     rightBottom.add(positiveSin);
     rightTop.add(positiveSin);
+
     Trio negativeSin = new Trio(0.0f, 0.0f, -1 * sinSize);
     leftBottom.add(negativeSin);
     leftTop.add(negativeSin);
@@ -113,6 +114,7 @@ public class Particle implements Comparable<Particle> {
     Trio positiveCos = new Trio(cosSize, 0.0f, 0.0f);
     rightBottom.add(positiveCos);
     rightTop.add(positiveCos);
+
     Trio negativeCos = new Trio(-1 * cosSize, 0.0f, 0.0f);
     leftBottom.add(negativeCos);
     leftTop.add(negativeCos);
@@ -120,6 +122,7 @@ public class Particle implements Comparable<Particle> {
     Trio negativeSize = new Trio(0.0f, -1 * particleSize, 0.0f);
     leftBottom.add(negativeSize);
     rightBottom.add(negativeSize);
+
     Trio positiveSize = new Trio(0.0f, particleSize, 0.0f);
     leftTop.add(positiveSize);
     rightTop.add(positiveSize);
