@@ -34,7 +34,7 @@ public abstract class ParticleSystem implements Observer {
   protected float systemRadius = 3.0f;
   protected float particleRadius = 0.08f;
   private Material material;
-  protected float fadeUnit = 0.05f;
+  protected float fadeUnit = 0.07f;
 
   protected ParticleSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture, Material material) {
     this.gl = gl;
