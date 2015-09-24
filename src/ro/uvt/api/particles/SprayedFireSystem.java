@@ -29,11 +29,7 @@ public class SprayedFireSystem extends ParticleSystem {
   }
 
   private Trio generateParticleDirectionVector() {
-    double xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-    double yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-    double zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-
-    Trio pointInSphere = Calculator.add(destination, new Trio(xVal, yVal, zVal));
+    Trio pointInSphere = generatePointInSphere(destination);
 
     Trio directionVector = Calculator.subtract(pointInSphere, source);
 
