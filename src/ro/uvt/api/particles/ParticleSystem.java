@@ -37,8 +37,6 @@ public abstract class ParticleSystem implements Observer {
   private Material material;
   protected float fadeUnit = 0.07f;
 
-  private Trio backupStartPosition = null;
-
   protected ParticleSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture, Material material) {
     this.gl = gl;
     this.source = source;
@@ -46,8 +44,6 @@ public abstract class ParticleSystem implements Observer {
     this.cameraPosition = cameraPosition;
     this.texture = texture;
     this.material = material;
-
-    backupStartPosition = new Trio(source.getX(), source.getY(), source.getZ());
   }
 
   protected void enableMaterial() {
@@ -96,7 +92,7 @@ public abstract class ParticleSystem implements Observer {
     }
   }
 
-  protected Trio generatePointInSphere(Trio sphereCenter) {
+  protected Trio generatePointInSphere(Trio sphereCenter, Trio backupPosition) {
     Trio pointInSphere = null;
 
     for (int i = 1; i <= 5; ++i) {
@@ -107,11 +103,11 @@ public abstract class ParticleSystem implements Observer {
       pointInSphere = Calculator.add(sphereCenter, new Trio(xVal, yVal, zVal));
 
       if (Calculator.computeDistance(sphereCenter, pointInSphere) <= systemRadius) {
-        backupStartPosition = new Trio(pointInSphere.getX(), pointInSphere.getY(), pointInSphere.getZ());
+        backupPosition = new Trio(pointInSphere.getX(), pointInSphere.getY(), pointInSphere.getZ());
         break;
       } else {
         if (i == 5) {
-          pointInSphere = new Trio(backupStartPosition.getX(), backupStartPosition.getY(), backupStartPosition.getZ());
+          pointInSphere = new Trio(backupPosition.getX(), backupPosition.getY(), backupPosition.getZ());
         }
       }
     }

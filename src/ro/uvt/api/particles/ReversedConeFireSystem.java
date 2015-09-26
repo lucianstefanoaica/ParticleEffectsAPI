@@ -13,9 +13,12 @@ public class ReversedConeFireSystem extends ParticleSystem {
   private Trio startSpeed = null;
   private Trio acceleration = null;
 
+  private Trio backupPosition = null;
+
   public ReversedConeFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
     super(gl, source, destination, cameraPosition, texture, material);
     this.systemRadius = systemRadius;
+    backupPosition = new Trio(source.getX(), source.getY(), source.getZ());
   }
 
   protected void spawnParticles() {
@@ -32,7 +35,7 @@ public class ReversedConeFireSystem extends ParticleSystem {
   }
 
   private void generateParticleDirectionVector() {
-    startPosition = generatePointInSphere(source);
+    startPosition = generatePointInSphere(source, backupPosition);
 
     Trio directionVector = Calculator.subtract(destination, startPosition);
 

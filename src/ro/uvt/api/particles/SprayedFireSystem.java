@@ -9,9 +9,13 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class SprayedFireSystem extends ParticleSystem {
 
+  private Trio backupPosition = null;
+
   public SprayedFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
     super(gl, source, destination, cameraPosition, texture, material);
     this.systemRadius = systemRadius;
+
+    backupPosition = new Trio(destination.getX(), destination.getY(), destination.getZ());
   }
 
   protected void spawnParticles() {
@@ -29,7 +33,7 @@ public class SprayedFireSystem extends ParticleSystem {
   }
 
   private Trio generateParticleDirectionVector() {
-    Trio pointInSphere = generatePointInSphere(destination);
+    Trio pointInSphere = generatePointInSphere(destination, backupPosition);
 
     Trio directionVector = Calculator.subtract(pointInSphere, source);
 

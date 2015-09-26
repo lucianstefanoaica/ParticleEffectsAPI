@@ -13,11 +13,15 @@ public class CylindricalFireSystem extends ParticleSystem {
   private Trio startSpeed = null;
   private Trio acceleration = null;
 
+  private Trio firstBackup = null;
   private Trio secondBackup = null;
 
   public CylindricalFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
     super(gl, source, destination, cameraPosition, texture, material);
     this.systemRadius = systemRadius;
+
+    firstBackup = new Trio(source.getX(), source.getY(), source.getZ());
+
     secondBackup = new Trio(destination.getX(), destination.getY(), destination.getZ());
   }
 
@@ -35,36 +39,12 @@ public class CylindricalFireSystem extends ParticleSystem {
   }
 
   private void generateParticleDirectionVector() {
-    Trio pointInFirstSphere = generatePointInSphere(source);
-    Trio pointInSecondSphere = generatePointInSphereB(destination);
+    Trio pointInFirstSphere = generatePointInSphere(source, firstBackup);
+    Trio pointInSecondSphere = generatePointInSphere(destination, secondBackup);
 
     Trio directionVector = Calculator.subtract(pointInSecondSphere, pointInFirstSphere);
 
     startPosition = pointInFirstSphere;
     acceleration = Calculator.makeItSmaller(directionVector, 450f);
-  }
-
-  // this is just a quick fix... this method will have to go away... I'll think of something...
-  private Trio generatePointInSphereB(Trio sphereCenter) {
-    Trio pointInSphere = null;
-
-    for (int i = 1; i <= 5; ++i) {
-      double xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-      double yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-      double zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-
-      pointInSphere = Calculator.add(sphereCenter, new Trio(xVal, yVal, zVal));
-
-      if (Calculator.computeDistance(sphereCenter, pointInSphere) <= systemRadius) {
-        secondBackup = new Trio(pointInSphere.getX(), pointInSphere.getY(), pointInSphere.getZ());
-        break;
-      } else {
-        if (i == 5) {
-          pointInSphere = new Trio(secondBackup.getX(), secondBackup.getY(), secondBackup.getZ());
-        }
-      }
-    }
-
-    return pointInSphere;
   }
 }
