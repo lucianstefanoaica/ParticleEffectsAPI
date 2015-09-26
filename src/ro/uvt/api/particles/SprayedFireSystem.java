@@ -11,10 +11,8 @@ public class SprayedFireSystem extends ParticleSystem {
 
   private Trio backupPosition = null;
 
-  public SprayedFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
-    super(gl, source, destination, cameraPosition, texture, material);
-    this.systemRadius = systemRadius;
-
+  public SprayedFireSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
+    super(gl, positions, texture, material, systemRadius);
     backupPosition = new Trio(destination.getX(), destination.getY(), destination.getZ());
   }
 

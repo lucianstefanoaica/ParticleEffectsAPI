@@ -16,12 +16,9 @@ public class CylindricalFireSystem extends ParticleSystem {
   private Trio firstBackup = null;
   private Trio secondBackup = null;
 
-  public CylindricalFireSystem(GL2 gl, Trio source, Trio destination, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
-    super(gl, source, destination, cameraPosition, texture, material);
-    this.systemRadius = systemRadius;
-
+  public CylindricalFireSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
+    super(gl, positions, texture, material, systemRadius);
     firstBackup = new Trio(source.getX(), source.getY(), source.getZ());
-
     secondBackup = new Trio(destination.getX(), destination.getY(), destination.getZ());
   }
 

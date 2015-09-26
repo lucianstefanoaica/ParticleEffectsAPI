@@ -32,18 +32,19 @@ public abstract class ParticleSystem implements Observer {
   protected int particlesPerSpawn = 350;
   protected Trio source;
   protected Trio destination;
-  protected float systemRadius = 3.0f;
+  protected float systemRadius;
   protected float particleRadius = 0.08f;
   private Material material;
   protected float fadeUnit = 0.07f;
 
-  protected ParticleSystem(GL2 gl, Trio source, Trio destination, Trio cameraPosition, Texture texture, Material material) {
+  protected ParticleSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
     this.gl = gl;
-    this.source = source;
-    this.destination = destination;
-    this.cameraPosition = cameraPosition;
+    this.source = positions[0];
+    this.destination = positions[1];
+    this.cameraPosition = positions[2];
     this.texture = texture;
     this.material = material;
+    this.systemRadius = systemRadius;
   }
 
   protected void enableMaterial() {

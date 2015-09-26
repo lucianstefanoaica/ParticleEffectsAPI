@@ -11,10 +11,8 @@ public class FountainSystem extends ParticleSystem {
 
   private Trio backupPosition = null;
 
-  public FountainSystem(GL2 gl, Trio source, Trio up, float systemRadius, Trio cameraPosition, Texture texture, Material material) {
-    super(gl, source, up, cameraPosition, texture, material);
-    this.systemRadius = systemRadius;
-
+  public FountainSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
+    super(gl, positions, texture, material, systemRadius);
     backupPosition = new Trio(destination.getX(), destination.getY(), destination.getZ());
   }
 
