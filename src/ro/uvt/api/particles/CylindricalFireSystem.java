@@ -42,6 +42,6 @@ public class CylindricalFireSystem extends ParticleSystem {
     Trio directionVector = Calculator.subtract(pointInSecondSphere, pointInFirstSphere);
 
     startPosition = pointInFirstSphere;
-    acceleration = Calculator.makeItSmaller(directionVector, 450f);
+    acceleration = Calculator.makeItSmaller(directionVector, directionVectorScalar);
   }
 }

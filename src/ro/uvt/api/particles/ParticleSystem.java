@@ -36,6 +36,15 @@ public abstract class ParticleSystem implements Observer {
   protected float particleRadius = 0.08f;
   private Material material;
   protected float fadeUnit = 0.07f;
+  protected float directionVectorScalar = 400f;
+
+  public float getDirectionVectorScalar() {
+    return directionVectorScalar;
+  }
+
+  public void setDirectionVectorScalar(float directionVectorScalar) {
+    this.directionVectorScalar = directionVectorScalar;
+  }
 
   protected ParticleSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
     this.gl = gl;
@@ -104,7 +113,9 @@ public abstract class ParticleSystem implements Observer {
       pointInSphere = Calculator.add(sphereCenter, new Trio(xVal, yVal, zVal));
 
       if (Calculator.computeDistance(sphereCenter, pointInSphere) <= systemRadius) {
-        backupPosition = new Trio(pointInSphere.getX(), pointInSphere.getY(), pointInSphere.getZ());
+        backupPosition.setX(pointInSphere.getX());
+        backupPosition.setY(pointInSphere.getY());
+        backupPosition.setZ(pointInSphere.getZ());
         break;
       } else {
         if (i == 5) {

@@ -38,6 +38,6 @@ public class ReversedConeFireSystem extends ParticleSystem {
 
     Trio directionVector = Calculator.subtract(destination, startPosition);
 
-    acceleration = Calculator.makeItSmaller(directionVector, 450f);
+    acceleration = Calculator.makeItSmaller(directionVector, directionVectorScalar);
   }
 }

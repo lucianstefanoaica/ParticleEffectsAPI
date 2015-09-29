@@ -35,7 +35,7 @@ public class SprayedFireSystem extends ParticleSystem {
 
     Trio directionVector = Calculator.subtract(pointInSphere, source);
 
-    Trio smallerDirectionVector = Calculator.makeItSmaller(directionVector, 400f);
+    Trio smallerDirectionVector = Calculator.makeItSmaller(directionVector, directionVectorScalar);
 
     return smallerDirectionVector;
   }
