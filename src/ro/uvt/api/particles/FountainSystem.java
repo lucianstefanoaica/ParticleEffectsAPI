@@ -11,6 +11,8 @@ public class FountainSystem extends ParticleSystem {
 
   private Trio backupPosition = null;
 
+  private Trio gravityVector = new Trio(0.0f, -0.006f, 0.0f);
+
   public FountainSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
     super(gl, positions, texture, material, systemRadius);
     backupPosition = new Trio(destination.getX(), destination.getY(), destination.getZ());
@@ -24,7 +26,9 @@ public class FountainSystem extends ParticleSystem {
 
       Trio acceleration = generateParticleDirectionVector();
 
-      Particle particle = new FountainParticle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
+      FountainParticle particle = new FountainParticle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
+
+      particle.setGravityVector(gravityVector);
 
       particles.add(particle);
     }
@@ -38,5 +42,13 @@ public class FountainSystem extends ParticleSystem {
     Trio smallerDirectionVector = Calculator.makeItSmaller(directionVector, directionVectorScalar);
 
     return smallerDirectionVector;
+  }
+
+  public Trio getGravityVector() {
+    return gravityVector;
+  }
+
+  public void setGravityVector(Trio gravityVector) {
+    this.gravityVector = gravityVector;
   }
 }
