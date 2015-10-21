@@ -25,7 +25,6 @@ public class Particle implements Comparable<Particle> {
 
   private double cameraAngle = 0.0f;
 
-  private Trio speed;
   protected Trio acceleration;
 
   private float lifespan;
@@ -43,7 +42,6 @@ public class Particle implements Comparable<Particle> {
     this.particleRadius = radius;
     computeCornerCoordinates(this.particlePosition, this.particleRadius);
 
-    this.speed = speed;
     this.acceleration = acceleration;
 
     this.cameraPosition = cameraPosition;
@@ -61,9 +59,10 @@ public class Particle implements Comparable<Particle> {
   }
 
   public void move() {
-    speed.add(acceleration);
-    particlePosition.add(speed);
+    // speed.add(acceleration);
+    particlePosition.add(acceleration);
     lifespan -= fadeUnit;
+    particleRadius += 0.01f;
   }
 
   public void draw() {
