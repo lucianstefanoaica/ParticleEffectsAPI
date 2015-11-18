@@ -6,6 +6,7 @@ import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 import javax.media.opengl.GL2;
 
 import ro.uvt.api.util.Calculator;
+import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
@@ -14,18 +15,18 @@ public class Particle implements Comparable<Particle> {
 
   private GL2 gl;
 
-  private Trio particlePosition;
+  private Vertex particlePosition;
 
-  private Trio leftBottom;
-  private Trio rightBottom;
-  private Trio rightTop;
-  private Trio leftTop;
+  private Vertex leftBottom;
+  private Vertex rightBottom;
+  private Vertex rightTop;
+  private Vertex leftTop;
 
-  private Trio cameraPosition;
+  private Vertex cameraPosition;
 
   private double cameraAngle = 0.0f;
 
-  protected Trio acceleration;
+  protected Vertex acceleration;
 
   private float lifespan;
 
@@ -37,7 +38,8 @@ public class Particle implements Comparable<Particle> {
 
   private float fadeUnit;
 
-  public Particle(GL2 gl, Trio position, Trio speed, Trio acceleration, Trio cameraPosition, double cameraAngle, Texture texture, float radius, float fade) {
+  public Particle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
+                  float fade) {
     this.particlePosition = position;
     this.particleRadius = radius;
     computeCornerCoordinates(this.particlePosition, this.particleRadius);
@@ -93,36 +95,36 @@ public class Particle implements Comparable<Particle> {
     return result;
   }
 
-  private void computeCornerCoordinates(Trio position, float particleSize) {
-    leftBottom = new Trio(position.getX(), position.getY(), position.getZ());
-    rightBottom = new Trio(position.getX(), position.getY(), position.getZ());
-    rightTop = new Trio(position.getX(), position.getY(), position.getZ());
-    leftTop = new Trio(position.getX(), position.getY(), position.getZ());
+  private void computeCornerCoordinates(Vertex center, float particleSize) {
+    leftBottom = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
+    rightBottom = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
+    rightTop = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
+    leftTop = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
 
     float sinSize = particleSize * (float) Math.sin(cameraAngle);
     float cosSize = particleSize * (float) Math.cos(cameraAngle);
 
-    Trio positiveSin = new Trio(0.0f, 0.0f, sinSize);
+    Vertex positiveSin = new Vertex(0.0f, 0.0f, sinSize);
     rightBottom.add(positiveSin);
     rightTop.add(positiveSin);
 
-    Trio negativeSin = new Trio(0.0f, 0.0f, -1 * sinSize);
+    Vertex negativeSin = new Vertex(0.0f, 0.0f, -1 * sinSize);
     leftBottom.add(negativeSin);
     leftTop.add(negativeSin);
 
-    Trio positiveCos = new Trio(cosSize, 0.0f, 0.0f);
+    Vertex positiveCos = new Vertex(cosSize, 0.0f, 0.0f);
     rightBottom.add(positiveCos);
     rightTop.add(positiveCos);
 
-    Trio negativeCos = new Trio(-1 * cosSize, 0.0f, 0.0f);
+    Vertex negativeCos = new Vertex(-1 * cosSize, 0.0f, 0.0f);
     leftBottom.add(negativeCos);
     leftTop.add(negativeCos);
 
-    Trio negativeSize = new Trio(0.0f, -1 * particleSize, 0.0f);
+    Vertex negativeSize = new Vertex(0.0f, -1 * particleSize, 0.0f);
     leftBottom.add(negativeSize);
     rightBottom.add(negativeSize);
 
-    Trio positiveSize = new Trio(0.0f, particleSize, 0.0f);
+    Vertex positiveSize = new Vertex(0.0f, particleSize, 0.0f);
     leftTop.add(positiveSize);
     rightTop.add(positiveSize);
   }
@@ -140,16 +142,16 @@ public class Particle implements Comparable<Particle> {
     gl.glBegin(GL_TRIANGLE_STRIP);
 
     gl.glTexCoord2d(rightTex, bottomTex);
-    gl.glVertex3f(rightBottom.getX(), rightBottom.getY(), rightBottom.getZ());
+    gl.glVertex3f(rightBottom.getPositionX(), rightBottom.getPositionY(), rightBottom.getPositionZ());
 
     gl.glTexCoord2d(rightTex, topTex);
-    gl.glVertex3f(rightTop.getX(), rightTop.getY(), rightTop.getZ());
+    gl.glVertex3f(rightTop.getPositionX(), rightTop.getPositionY(), rightTop.getPositionZ());
 
     gl.glTexCoord2d(leftTex, bottomTex);
-    gl.glVertex3f(leftBottom.getX(), leftBottom.getY(), leftBottom.getZ());
+    gl.glVertex3f(leftBottom.getPositionX(), leftBottom.getPositionY(), leftBottom.getPositionZ());
 
     gl.glTexCoord2d(leftTex, topTex);
-    gl.glVertex3f(leftTop.getX(), leftTop.getY(), leftTop.getZ());
+    gl.glVertex3f(leftTop.getPositionX(), leftTop.getPositionY(), leftTop.getPositionZ());
 
     gl.glEnd();
 
@@ -158,17 +160,17 @@ public class Particle implements Comparable<Particle> {
 
   private void computeCameraDistance() {
     //    Don`t know if I will ever need this code, but i will keep it commented here just in case
-    //    Trio planeCameraVector = Calculator.subtract(cameraPosition, particlePosition);
+    //    Vertex planeCameraVector = Calculator.subtract(cameraPosition, particlePosition);
     //
-    //    Trio pb = Calculator.subtract(rightTop, particlePosition);
-    //    Trio pa = Calculator.subtract(leftTop, particlePosition);
-    //    Trio planeNormal = Calculator.cross(pb, pa);
+    //    Vertex pb = Calculator.subtract(rightTop, particlePosition);
+    //    Vertex pa = Calculator.subtract(leftTop, particlePosition);
+    //    Vertex planeNormal = Calculator.cross(pb, pa);
     //    cameraDistance = Calculator.computePointPlaneDistance(planeCameraVector, planeNormal);
 
     cameraDistance = Calculator.computeDistance(cameraPosition, particlePosition);
   }
 
-  public void setCameraPosition(Trio cameraPosition) {
+  public void setCameraPosition(Vertex cameraPosition) {
     this.cameraPosition = cameraPosition;
   }
 

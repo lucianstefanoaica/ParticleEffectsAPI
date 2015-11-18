@@ -3,31 +3,29 @@ package ro.uvt.api.util;
 
 import java.util.Random;
 
-import ro.uvt.api.particles.Trio;
-
 public class Calculator {
 
-  public static Trio add(Trio first, Trio second) {
-    float a = first.getX() + second.getX();
-    float b = first.getY() + second.getY();
-    float c = first.getZ() + second.getZ();
+  public static Vertex add(Vertex first, Vertex second) {
+    float a = first.getPositionX() + second.getPositionX();
+    float b = first.getPositionY() + second.getPositionY();
+    float c = first.getPositionZ() + second.getPositionZ();
 
-    return new Trio(a, b, c);
+    return new Vertex(a, b, c);
   }
 
-  public static Trio subtract(Trio first, Trio second) {
-    float a = first.getX() - second.getX();
-    float b = first.getY() - second.getY();
-    float c = first.getZ() - second.getZ();
+  public static Vertex subtract(Vertex first, Vertex second) {
+    float a = first.getPositionX() - second.getPositionX();
+    float b = first.getPositionY() - second.getPositionY();
+    float c = first.getPositionZ() - second.getPositionZ();
 
-    return new Trio(a, b, c);
+    return new Vertex(a, b, c);
   }
 
-  public static Trio normalize(Trio vector) {
+  public static Vertex normalize(Vertex vector) {
 
-    float x = vector.getX();
-    float y = vector.getY();
-    float z = vector.getZ();
+    float x = vector.getPositionX();
+    float y = vector.getPositionY();
+    float z = vector.getPositionZ();
 
     double xSquared = Math.pow(x, 2);
     double ySquared = Math.pow(y, 2);
@@ -43,17 +41,17 @@ public class Calculator {
     float b = y / (float) magnitude;
     float c = z / (float) magnitude;
 
-    return new Trio(a, b, c);
+    return new Vertex(a, b, c);
   }
 
-  public static Trio cross(Trio first, Trio second) {
-    float a1 = first.getX();
-    float a2 = first.getY();
-    float a3 = first.getZ();
+  public static Vertex cross(Vertex first, Vertex second) {
+    float a1 = first.getPositionX();
+    float a2 = first.getPositionY();
+    float a3 = first.getPositionZ();
 
-    float b1 = second.getX();
-    float b2 = second.getY();
-    float b3 = second.getZ();
+    float b1 = second.getPositionX();
+    float b2 = second.getPositionY();
+    float b3 = second.getPositionZ();
 
     float a = a2 * b3 - a3 * b2;
 
@@ -61,26 +59,26 @@ public class Calculator {
 
     float c = a1 * b2 - a2 * b1;
 
-    return new Trio(a, b, c);
+    return new Vertex(a, b, c);
   }
 
-  public static Trio scale(Trio vector, int scale) {
-    float a = vector.getX() * scale;
-    float b = vector.getY() * scale;
-    float c = vector.getZ() * scale;
+  public static Vertex scale(Vertex vector, int scale) {
+    float a = vector.getPositionX() * scale;
+    float b = vector.getPositionY() * scale;
+    float c = vector.getPositionZ() * scale;
 
-    return new Trio(a, b, c);
+    return new Vertex(a, b, c);
   }
 
-  public static double computeDistance(Trio first, Trio second) {
+  public static double computeDistance(Vertex first, Vertex second) {
 
-    double x1 = first.getX();
-    double y1 = first.getY();
-    double z1 = first.getZ();
+    double x1 = first.getPositionX();
+    double y1 = first.getPositionY();
+    double z1 = first.getPositionZ();
 
-    double x2 = second.getX();
-    double y2 = second.getY();
-    double z2 = second.getZ();
+    double x2 = second.getPositionX();
+    double y2 = second.getPositionY();
+    double z2 = second.getPositionZ();
 
     double firstTerm = Math.pow(x2 - x1, 2);
     double secondTerm = Math.pow(y2 - y1, 2);
@@ -95,14 +93,14 @@ public class Calculator {
    * @param planeNormal a vector which represents the normal of the plane
    * @return the distance from the plane to the point Q
    */
-  public static double computePointPlaneDistance(Trio planePointVector, Trio planeNormal) {
-    double xPQ = planePointVector.getX();
-    double yPQ = planePointVector.getY();
-    double zPQ = planePointVector.getZ();
+  public static double computePointPlaneDistance(Vertex planePointVector, Vertex planeNormal) {
+    double xPQ = planePointVector.getPositionX();
+    double yPQ = planePointVector.getPositionY();
+    double zPQ = planePointVector.getPositionZ();
 
-    double xN = planeNormal.getX();
-    double yN = planeNormal.getY();
-    double zN = planeNormal.getZ();
+    double xN = planeNormal.getPositionX();
+    double yN = planeNormal.getPositionY();
+    double zN = planeNormal.getPositionZ();
 
     double xSquared = Math.pow(xN, 2);
     double ySquared = Math.pow(yN, 2);
@@ -114,21 +112,21 @@ public class Calculator {
     return denominator / divisor;
   }
 
-  public static double getRandomNumberInRange(double min, double max) {
-    double range = max - min;
+  public static float getRandomNumberInRange(float min, float max) {
+    float range = max - min;
 
     Random gen = new Random();
 
-    double scaledNumber = gen.nextDouble() * range;
+    float scaledNumber = (float) gen.nextDouble() * range;
 
     return scaledNumber + min;
   }
-  
-  public static Trio makeItSmaller(Trio what, float denominator) {
-    float xVal = what.getX() / denominator;
-    float yVal = what.getY() / denominator;
-    float zVal = what.getZ() / denominator;
-    
-    return new Trio(xVal, yVal, zVal);
+
+  public static Vertex makeItSmaller(Vertex what, float denominator) {
+    float xVal = what.getPositionX() / denominator;
+    float yVal = what.getPositionY() / denominator;
+    float zVal = what.getPositionZ() / denominator;
+
+    return new Vertex(xVal, yVal, zVal);
   }
 }

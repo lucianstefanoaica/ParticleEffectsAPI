@@ -1,29 +1,32 @@
 
-package ro.uvt.api.particles;
+package ro.uvt.api.systems;
 
 import javax.media.opengl.GL2;
 
+import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
+import ro.uvt.api.util.MaterialProperties;
+import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
 
-public class ReversedConeFireSystem extends ParticleSystem {
+public class ReversedSystem extends ParticleSystem {
 
-  private Trio startPosition = null;
-  private Trio startSpeed = null;
-  private Trio acceleration = null;
+  private Vertex startPosition = null;
+  private Vertex startSpeed = null;
+  private Vertex acceleration = null;
 
-  private Trio backupPosition = null;
+  private Vertex backupPosition = null;
 
-  public ReversedConeFireSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
+  public ReversedSystem(GL2 gl, Vertex[] positions, Texture texture, MaterialProperties material, float systemRadius) {
     super(gl, positions, texture, material, systemRadius);
-    backupPosition = new Trio(source.getX(), source.getY(), source.getZ());
+    backupPosition = new Vertex(source.getPositionX(), source.getPositionY(), source.getPositionZ());
   }
 
   protected void spawnParticles() {
     for (int i = 0; i < particlesPerSpawn; ++i) {
 
-      startSpeed = new Trio(0.0f, 0.0f, 0.0f);
+      startSpeed = new Vertex(0.0f, 0.0f, 0.0f);
 
       generateParticleDirectionVector();
 
@@ -36,7 +39,7 @@ public class ReversedConeFireSystem extends ParticleSystem {
   private void generateParticleDirectionVector() {
     startPosition = generatePointInSphere(source, backupPosition);
 
-    Trio directionVector = Calculator.subtract(destination, startPosition);
+    Vertex directionVector = Calculator.subtract(destination, startPosition);
 
     acceleration = Calculator.makeItSmaller(directionVector, directionVectorScalar);
   }

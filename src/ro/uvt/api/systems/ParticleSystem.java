@@ -1,5 +1,5 @@
 
-package ro.uvt.api.particles;
+package ro.uvt.api.systems;
 
 import static javax.media.opengl.GL.GL_BLEND;
 import static javax.media.opengl.GL.GL_FRONT;
@@ -12,13 +12,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.media.opengl.GL2;
 
+import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
+import ro.uvt.api.util.MaterialProperties;
 import ro.uvt.api.util.Observer;
 import ro.uvt.api.util.Subject;
+import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
 
@@ -27,14 +29,14 @@ public abstract class ParticleSystem implements Observer {
   protected GL2 gl;
   protected List<Particle> particles = new ArrayList<>();
   protected Texture texture;
-  protected Trio cameraPosition;
+  protected Vertex cameraPosition;
   protected double cameraAngle = 0.0f;
   protected int particlesPerSpawn = 350;
-  protected Trio source;
-  protected Trio destination;
+  protected Vertex source;
+  protected Vertex destination;
   protected float systemRadius;
   protected float particleRadius = 0.08f;
-  private Material material;
+  private MaterialProperties material;
   protected float fadeUnit = 0.07f;
   protected float directionVectorScalar = 400f;
 
@@ -46,7 +48,7 @@ public abstract class ParticleSystem implements Observer {
     this.directionVectorScalar = directionVectorScalar;
   }
 
-  protected ParticleSystem(GL2 gl, Trio[] positions, Texture texture, Material material, float systemRadius) {
+  protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, MaterialProperties material, float systemRadius) {
     this.gl = gl;
     this.source = positions[0];
     this.destination = positions[1];
@@ -57,10 +59,10 @@ public abstract class ParticleSystem implements Observer {
   }
 
   protected void enableMaterial() {
-    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.getKd(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.getKs(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, material.getKa(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SHININESS, material.getNs(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.getDiffuse(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.getSpecular(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, material.getAmbient(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_SHININESS, material.getShine(), 0);
   }
 
   protected abstract void spawnParticles();
@@ -73,27 +75,42 @@ public abstract class ParticleSystem implements Observer {
     Collections.sort(particles);
 
     gl.glEnable(GL_BLEND);
+    gl.glDepthMask(false);
+    // I can't seem to understand why but this code caused a pretty ugly memory leak
+    //ListIterator<Particle> index = particles.listIterator(particles.size());
 
-    ListIterator<Particle> index = particles.listIterator(particles.size());
+    //    while (index.hasPrevious()) {
+    //
+    //      Particle particle = (Particle) index.previous();
+    //
+    //      particle.draw();
+    //
+    //      particle.move();
+    //
+    //      if (particle.died() == true) {
+    //        index.remove();
+    //      }
+    //    }
+    
+    // This code works better (no memory leak)
+    for (int index = particles.size() - 1; index >= 0; --index) {
+      Particle aParticle = particles.get(index);
 
-    while (index.hasPrevious()) {
-
-      Particle particle = (Particle) index.previous();
-
-      particle.draw();
-
-      particle.move();
-
-      if (particle.died() == true) {
-        index.remove();
+      aParticle.draw();
+      aParticle.move();
+      
+      if (aParticle.died()) {
+        particles.remove(index);
       }
     }
+    
+    gl.glDepthMask(true);
   }
 
   @Override
   public void update(Subject toObserve) {
     HashMap<String, Object> subjectState = toObserve.getState();
-    cameraPosition = (Trio) subjectState.get("camera_position");
+    cameraPosition = (Vertex) subjectState.get("camera_position");
     cameraAngle = (Double) subjectState.get("camera_angle");
 
     for (Particle particle : particles) {
@@ -102,24 +119,24 @@ public abstract class ParticleSystem implements Observer {
     }
   }
 
-  protected Trio generatePointInSphere(Trio sphereCenter, Trio backupPosition) {
-    Trio pointInSphere = null;
+  protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
+    Vertex pointInSphere = null;
 
     for (int i = 1; i <= 5; ++i) {
-      double xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-      double yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-      double zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
+      float xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
+      float yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
+      float zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
 
-      pointInSphere = Calculator.add(sphereCenter, new Trio(xVal, yVal, zVal));
+      pointInSphere = Calculator.add(sphereCenter, new Vertex(xVal, yVal, zVal));
 
       if (Calculator.computeDistance(sphereCenter, pointInSphere) <= systemRadius) {
-        backupPosition.setX(pointInSphere.getX());
-        backupPosition.setY(pointInSphere.getY());
-        backupPosition.setZ(pointInSphere.getZ());
+        backup.setPositionX(pointInSphere.getPositionX());
+        backup.setPositionY(pointInSphere.getPositionY());
+        backup.setPositionZ(pointInSphere.getPositionZ());
         break;
       } else {
         if (i == 5) {
-          pointInSphere = new Trio(backupPosition.getX(), backupPosition.getY(), backupPosition.getZ());
+          pointInSphere = new Vertex(backup.getPositionX(), backup.getPositionY(), backup.getPositionZ());
         }
       }
     }
