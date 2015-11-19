@@ -26,6 +26,9 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public abstract class ParticleSystem implements Observer {
 
+  private float systemRadius;
+  private MaterialProperties material;
+
   protected GL2 gl;
   protected List<Particle> particles = new ArrayList<>();
   protected Texture texture;
@@ -34,19 +37,10 @@ public abstract class ParticleSystem implements Observer {
   protected int particlesPerSpawn = 350;
   protected Vertex source;
   protected Vertex destination;
-  protected float systemRadius;
   protected float particleRadius = 0.08f;
-  private MaterialProperties material;
+
   protected float fadeUnit = 0.07f;
   protected float directionVectorScalar = 400f;
-
-  public float getDirectionVectorScalar() {
-    return directionVectorScalar;
-  }
-
-  public void setDirectionVectorScalar(float directionVectorScalar) {
-    this.directionVectorScalar = directionVectorScalar;
-  }
 
   protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, MaterialProperties material, float systemRadius) {
     this.gl = gl;
@@ -58,66 +52,7 @@ public abstract class ParticleSystem implements Observer {
     this.systemRadius = systemRadius;
   }
 
-  protected void enableMaterial() {
-    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.getDiffuse(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.getSpecular(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, material.getAmbient(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SHININESS, material.getShine(), 0);
-  }
-
   protected abstract void spawnParticles();
-
-  public void draw() {
-    enableMaterial();
-    texture.bind(gl);
-
-    spawnParticles();
-    Collections.sort(particles);
-
-    gl.glEnable(GL_BLEND);
-    gl.glDepthMask(false);
-    // I can't seem to understand why but this code caused a pretty ugly memory leak
-    //ListIterator<Particle> index = particles.listIterator(particles.size());
-
-    //    while (index.hasPrevious()) {
-    //
-    //      Particle particle = (Particle) index.previous();
-    //
-    //      particle.draw();
-    //
-    //      particle.move();
-    //
-    //      if (particle.died() == true) {
-    //        index.remove();
-    //      }
-    //    }
-    
-    // This code works better (no memory leak)
-    for (int index = particles.size() - 1; index >= 0; --index) {
-      Particle aParticle = particles.get(index);
-
-      aParticle.draw();
-      aParticle.move();
-      
-      if (aParticle.died()) {
-        particles.remove(index);
-      }
-    }
-    
-    gl.glDepthMask(true);
-  }
-
-  @Override
-  public void update(Subject toObserve) {
-    HashMap<String, Object> subjectState = toObserve.getState();
-    cameraPosition = (Vertex) subjectState.get("camera_position");
-    cameraAngle = (Double) subjectState.get("camera_angle");
-
-    for (Particle particle : particles) {
-      particle.setCameraAngle(cameraAngle);
-      particle.setCameraPosition(cameraPosition);
-    }
-  }
 
   protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
     Vertex pointInSphere = null;
@@ -144,6 +79,57 @@ public abstract class ParticleSystem implements Observer {
     return pointInSphere;
   }
 
+  protected void enableMaterial() {
+    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.getDiffuse(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.getSpecular(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, material.getAmbient(), 0);
+    gl.glMaterialfv(GL_FRONT, GL_SHININESS, material.getShine(), 0);
+  }
+
+  public void draw() {
+    enableMaterial();
+    texture.bind(gl);
+
+    spawnParticles();
+    Collections.sort(particles);
+
+    gl.glEnable(GL_BLEND);
+    gl.glDepthMask(false);
+
+    for (int index = particles.size() - 1; index >= 0; --index) {
+      Particle aParticle = particles.get(index);
+
+      aParticle.draw();
+      aParticle.move();
+
+      if (aParticle.died()) {
+        particles.remove(index);
+      }
+    }
+    gl.glDepthMask(true);
+  }
+
+  @Override
+  public void update(Subject toObserve) {
+    HashMap<String, Object> subjectState = toObserve.getState();
+    cameraPosition = (Vertex) subjectState.get("camera_position");
+    cameraAngle = (Double) subjectState.get("camera_angle");
+
+    for (Particle particle : particles) {
+      particle.setCameraAngle(cameraAngle);
+      particle.setCameraPosition(cameraPosition);
+    }
+  }
+
+  // getters & setters
+  public float getSystemRadius() {
+    return systemRadius;
+  }
+
+  public void setSystemRadius(float systemRadius) {
+    this.systemRadius = systemRadius;
+  }
+
   public Texture getTexture() {
     return texture;
   }
@@ -160,14 +146,6 @@ public abstract class ParticleSystem implements Observer {
     this.particlesPerSpawn = particlesPerSpawn;
   }
 
-  public float getSystemRadius() {
-    return systemRadius;
-  }
-
-  public void setSystemRadius(float systemRadius) {
-    this.systemRadius = systemRadius;
-  }
-
   public float getParticleRadius() {
     return particleRadius;
   }
@@ -182,5 +160,13 @@ public abstract class ParticleSystem implements Observer {
 
   public void setFadeUnit(float fadeUnit) {
     this.fadeUnit = fadeUnit;
+  }
+
+  public float getDirectionVectorScalar() {
+    return directionVectorScalar;
+  }
+
+  public void setDirectionVectorScalar(float directionVectorScalar) {
+    this.directionVectorScalar = directionVectorScalar;
   }
 }

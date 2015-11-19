@@ -14,29 +14,21 @@ import com.jogamp.opengl.util.texture.TextureCoords;
 public class Particle implements Comparable<Particle> {
 
   private GL2 gl;
-
-  private Vertex particlePosition;
-
   private Vertex leftBottom;
   private Vertex rightBottom;
   private Vertex rightTop;
   private Vertex leftTop;
-
   private Vertex cameraPosition;
-
   private double cameraAngle = 0.0f;
-
-  protected Vertex acceleration;
-
-  private float lifespan;
-
-  private float particleRadius;
-
   private double cameraDistance;
-
   private Texture texture;
-
   private float fadeUnit;
+
+  protected float particleRadius;
+  protected Vertex particlePosition;
+  protected Vertex speed;
+  protected Vertex acceleration;
+  protected float lifespan;
 
   public Particle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
                   float fade) {
@@ -45,6 +37,7 @@ public class Particle implements Comparable<Particle> {
     computeCornerCoordinates(this.particlePosition, this.particleRadius);
 
     this.acceleration = acceleration;
+    this.speed = speed;
 
     this.cameraPosition = cameraPosition;
     this.cameraAngle = cameraAngle;
@@ -61,10 +54,11 @@ public class Particle implements Comparable<Particle> {
   }
 
   public void move() {
-    // speed.add(acceleration);
+    speed.add(acceleration);
     particlePosition.add(acceleration);
     lifespan -= fadeUnit;
-    particleRadius += 0.01f;
+    // I don't want particles to grow right now
+    // particleRadius += 0.001f;
   }
 
   public void draw() {
@@ -76,7 +70,7 @@ public class Particle implements Comparable<Particle> {
   }
 
   public boolean died() {
-    if (lifespan < 0) {
+    if (lifespan <= 0.0f) {
       return true;
     } else {
       return false;
@@ -170,8 +164,17 @@ public class Particle implements Comparable<Particle> {
     cameraDistance = Calculator.computeDistance(cameraPosition, particlePosition);
   }
 
+  // getters & setters
+  public Vertex getCameraPosition() {
+    return cameraPosition;
+  }
+
   public void setCameraPosition(Vertex cameraPosition) {
     this.cameraPosition = cameraPosition;
+  }
+
+  public double getCameraAngle() {
+    return cameraAngle;
   }
 
   public void setCameraAngle(double cameraAngle) {
