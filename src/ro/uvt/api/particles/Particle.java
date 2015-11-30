@@ -95,32 +95,17 @@ public class Particle implements Comparable<Particle> {
     rightTop = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
     leftTop = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
 
-    float sinSize = particleSize * (float) Math.sin(cameraAngle);
-    float cosSize = particleSize * (float) Math.cos(cameraAngle);
+    float rightSideSin = particleSize * (float) Math.sin(cameraAngle);
+    float rightSideCos = particleSize * (float) Math.cos(cameraAngle);
 
-    Vertex positiveSin = new Vertex(0.0f, 0.0f, sinSize);
-    rightBottom.add(positiveSin);
-    rightTop.add(positiveSin);
+    rightBottom.add(new Vertex(rightSideCos, -1 * particleSize, -1 * rightSideSin));
+    rightTop.add(new Vertex(rightSideCos, particleSize, -1 * rightSideSin));
 
-    Vertex negativeSin = new Vertex(0.0f, 0.0f, -1 * sinSize);
-    leftBottom.add(negativeSin);
-    leftTop.add(negativeSin);
+    float leftSideSin = particleSize * (float) Math.sin(cameraAngle + Math.PI);
+    float leftSideCos = particleSize * (float) Math.cos(cameraAngle + Math.PI);
 
-    Vertex positiveCos = new Vertex(cosSize, 0.0f, 0.0f);
-    rightBottom.add(positiveCos);
-    rightTop.add(positiveCos);
-
-    Vertex negativeCos = new Vertex(-1 * cosSize, 0.0f, 0.0f);
-    leftBottom.add(negativeCos);
-    leftTop.add(negativeCos);
-
-    Vertex negativeSize = new Vertex(0.0f, -1 * particleSize, 0.0f);
-    leftBottom.add(negativeSize);
-    rightBottom.add(negativeSize);
-
-    Vertex positiveSize = new Vertex(0.0f, particleSize, 0.0f);
-    leftTop.add(positiveSize);
-    rightTop.add(positiveSize);
+    leftTop.add(new Vertex(leftSideCos, particleSize, -1 * leftSideSin));
+    leftBottom.add(new Vertex(leftSideCos, -particleSize, -1 * leftSideSin));
   }
 
   private void drawCorners() {
