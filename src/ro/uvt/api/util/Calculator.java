@@ -62,7 +62,7 @@ public class Calculator {
     return new Vertex(a, b, c);
   }
 
-  public static Vertex scale(Vertex vector, int scale) {
+  public static Vertex scaleUp(Vertex vector, int scale) {
     float a = vector.getPositionX() * scale;
     float b = vector.getPositionY() * scale;
     float c = vector.getPositionZ() * scale;
@@ -122,10 +122,10 @@ public class Calculator {
     return scaledNumber + min;
   }
 
-  public static Vertex makeItSmaller(Vertex what, float denominator) {
-    float xVal = what.getPositionX() / denominator;
-    float yVal = what.getPositionY() / denominator;
-    float zVal = what.getPositionZ() / denominator;
+  public static Vertex scaleDown(Vertex what, float scalar) {
+    float xVal = what.getPositionX() / scalar;
+    float yVal = what.getPositionY() / scalar;
+    float zVal = what.getPositionZ() / scalar;
 
     return new Vertex(xVal, yVal, zVal);
   }

@@ -3,6 +3,7 @@ package ro.uvt.api.particles;
 
 import javax.media.opengl.GL2;
 
+import ro.uvt.api.util.MaterialProperties;
 import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -13,9 +14,11 @@ public class FountainParticle extends Particle {
 
   private float maxRadius = 0.4f;
 
+  private float radiusStep = 0.01f;
+
   public FountainParticle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
-                          float fade) {
-    super(gl, position, speed, acceleration, cameraPosition, cameraAngle, texture, radius, fade);
+                          float fade, MaterialProperties material) {
+    super(gl, position, speed, acceleration, cameraPosition, cameraAngle, texture, radius, fade, material);
   }
 
   @Override
@@ -26,7 +29,7 @@ public class FountainParticle extends Particle {
     }
 
     if (particleRadius < maxRadius) {
-      particleRadius += 0.01f;
+      particleRadius += radiusStep;
     }
 
     super.move();

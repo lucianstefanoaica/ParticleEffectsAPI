@@ -32,7 +32,7 @@ public class CylindricalSystem extends ParticleSystem {
 
       generateParticleDirectionVector();
 
-      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
+      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
 
       particles.add(particle);
     }
@@ -42,9 +42,9 @@ public class CylindricalSystem extends ParticleSystem {
     Vertex pointInFirstSphere = generatePointInSphere(source, firstBackup);
     Vertex pointInSecondSphere = generatePointInSphere(destination, secondBackup);
 
-    Vertex directionVector = Calculator.subtract(pointInSecondSphere, pointInFirstSphere);
+    Vertex differenceVector = Calculator.subtract(pointInSecondSphere, pointInFirstSphere);
 
     startPosition = pointInFirstSphere;
-    acceleration = Calculator.makeItSmaller(directionVector, directionVectorScalar);
+    acceleration = Calculator.scaleDown(differenceVector, scalar);
   }
 }

@@ -15,6 +15,16 @@ public class MaterialProperties {
     this.shine = shine;
   }
 
+  public void decreaseAlphaComponent(float fadeUnit) {
+    ambient[3] -= fadeUnit;
+    diffuse[3] -= fadeUnit;
+    specular[3] -= fadeUnit;
+  }
+
+  public MaterialProperties clone() {
+    return new MaterialProperties(ambient.clone(), diffuse.clone(), specular.clone(), shine.clone());
+  }
+
   public float[] getAmbient() {
     return ambient;
   }

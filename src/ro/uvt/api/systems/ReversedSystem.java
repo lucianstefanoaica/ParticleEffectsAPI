@@ -30,7 +30,7 @@ public class ReversedSystem extends ParticleSystem {
 
       generateParticleDirectionVector();
 
-      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
+      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
 
       particles.add(particle);
     }
@@ -39,8 +39,8 @@ public class ReversedSystem extends ParticleSystem {
   private void generateParticleDirectionVector() {
     startPosition = generatePointInSphere(source, backupPosition);
 
-    Vertex directionVector = Calculator.subtract(destination, startPosition);
+    Vertex differenceVector = Calculator.subtract(destination, startPosition);
 
-    acceleration = Calculator.makeItSmaller(directionVector, directionVectorScalar);
+    acceleration = Calculator.scaleDown(differenceVector, scalar);
   }
 }

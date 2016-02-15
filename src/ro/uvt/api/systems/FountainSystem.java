@@ -27,9 +27,9 @@ public class FountainSystem extends ParticleSystem {
       Vertex loc = source.clone();
       Vertex speed = new Vertex(0.0f, 0.0f, 0.0f);
 
-      Vertex acceleration = generateParticleDirectionVector();
+      Vertex acceleration = generateMovementVector();
 
-      FountainParticle particle = new FountainParticle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit);
+      FountainParticle particle = new FountainParticle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
 
       particle.setGravityVector(gravityVector);
 
@@ -37,14 +37,12 @@ public class FountainSystem extends ParticleSystem {
     }
   }
 
-  private Vertex generateParticleDirectionVector() {
+  private Vertex generateMovementVector() {
     Vertex pointInSphere = generatePointInSphere(destination, backupPosition);
 
-    Vertex directionVector = Calculator.subtract(pointInSphere, source);
+    Vertex differenceVector = Calculator.subtract(pointInSphere, source);
 
-    Vertex smallerDirectionVector = Calculator.makeItSmaller(directionVector, directionVectorScalar);
-
-    return smallerDirectionVector;
+    return Calculator.scaleDown(differenceVector, scalar);
   }
 
   public Vertex getGravityVector() {

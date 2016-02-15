@@ -1,11 +1,17 @@
 
 package ro.uvt.api.particles;
 
+// import static javax.media.opengl.GL.GL_FRONT;
+import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
 import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 import javax.media.opengl.GL2;
 
 import ro.uvt.api.util.Calculator;
+import ro.uvt.api.util.MaterialProperties;
 import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -30,8 +36,10 @@ public class Particle implements Comparable<Particle> {
   protected Vertex acceleration;
   protected float lifespan;
 
+  private MaterialProperties material;
+
   public Particle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
-                  float fade) {
+                  float fade, MaterialProperties material) {
     this.particlePosition = position;
     this.particleRadius = radius;
     computeCornerCoordinates(this.particlePosition, this.particleRadius);
@@ -41,6 +49,8 @@ public class Particle implements Comparable<Particle> {
 
     this.cameraPosition = cameraPosition;
     this.cameraAngle = cameraAngle;
+
+    this.material = material;
 
     fadeUnit = fade;
 
@@ -65,7 +75,15 @@ public class Particle implements Comparable<Particle> {
     computeCornerCoordinates(particlePosition, particleRadius);
     computeCameraDistance();
 
-    gl.glColor4f(0.0f, 0.0f, 0.0f, lifespan);
+    // this will not work when lighting is enabled
+    // gl.glColor4f(0.0f, 0.0f, 0.0f, lifespan);
+
+    material.decreaseAlphaComponent(fadeUnit);
+
+    gl.glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.getDiffuse(), 0);
+    gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.getSpecular(), 0);
+    gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.getAmbient(), 0);
+
     drawCorners();
   }
 
@@ -95,17 +113,15 @@ public class Particle implements Comparable<Particle> {
     rightTop = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
     leftTop = new Vertex(center.getPositionX(), center.getPositionY(), center.getPositionZ());
 
-    float rightSideSin = particleSize * (float) Math.sin(cameraAngle);
-    float rightSideCos = particleSize * (float) Math.cos(cameraAngle);
+    float rightSideZ = -particleSize * (float) Math.sin(cameraAngle);
+    float rightSideX = particleSize * (float) Math.cos(cameraAngle);
+    rightBottom.add(new Vertex(rightSideX, -particleSize, rightSideZ));
+    rightTop.add(new Vertex(rightSideX, particleSize, rightSideZ));
 
-    rightBottom.add(new Vertex(rightSideCos, -1 * particleSize, -1 * rightSideSin));
-    rightTop.add(new Vertex(rightSideCos, particleSize, -1 * rightSideSin));
-
-    float leftSideSin = particleSize * (float) Math.sin(cameraAngle + Math.PI);
-    float leftSideCos = particleSize * (float) Math.cos(cameraAngle + Math.PI);
-
-    leftTop.add(new Vertex(leftSideCos, particleSize, -1 * leftSideSin));
-    leftBottom.add(new Vertex(leftSideCos, -particleSize, -1 * leftSideSin));
+    float leftSideZ = -particleSize * (float) Math.sin(cameraAngle + Math.PI);
+    float leftSideX = particleSize * (float) Math.cos(cameraAngle + Math.PI);
+    leftTop.add(new Vertex(leftSideX, particleSize, leftSideZ));
+    leftBottom.add(new Vertex(leftSideX, -particleSize, leftSideZ));
   }
 
   private void drawCorners() {

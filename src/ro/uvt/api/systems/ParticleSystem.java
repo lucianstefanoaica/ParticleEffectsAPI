@@ -9,7 +9,6 @@ import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +26,7 @@ import com.jogamp.opengl.util.texture.Texture;
 public abstract class ParticleSystem implements Observer {
 
   private float systemRadius;
-  private MaterialProperties material;
+  protected MaterialProperties material;
 
   protected GL2 gl;
   protected List<Particle> particles = new ArrayList<>();
@@ -40,7 +39,7 @@ public abstract class ParticleSystem implements Observer {
   protected float particleRadius = 0.08f;
 
   protected float fadeUnit = 0.07f;
-  protected float directionVectorScalar = 400f;
+  protected float scalar = 400f;
 
   protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, MaterialProperties material, float systemRadius) {
     this.gl = gl;
@@ -55,28 +54,28 @@ public abstract class ParticleSystem implements Observer {
   protected abstract void spawnParticles();
 
   protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
-    Vertex pointInSphere = null;
+    Vertex point = null;
 
     for (int i = 1; i <= 5; ++i) {
       float xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
       float yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
       float zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
 
-      pointInSphere = Calculator.add(sphereCenter, new Vertex(xVal, yVal, zVal));
+      point = Calculator.add(sphereCenter, new Vertex(xVal, yVal, zVal));
 
-      if (Calculator.computeDistance(sphereCenter, pointInSphere) <= systemRadius) {
-        backup.setPositionX(pointInSphere.getPositionX());
-        backup.setPositionY(pointInSphere.getPositionY());
-        backup.setPositionZ(pointInSphere.getPositionZ());
+      if (Calculator.computeDistance(sphereCenter, point) <= systemRadius) {
+        backup.setPositionX(point.getPositionX());
+        backup.setPositionY(point.getPositionY());
+        backup.setPositionZ(point.getPositionZ());
         break;
       } else {
         if (i == 5) {
-          pointInSphere = new Vertex(backup.getPositionX(), backup.getPositionY(), backup.getPositionZ());
+          point = new Vertex(backup.getPositionX(), backup.getPositionY(), backup.getPositionZ());
         }
       }
     }
 
-    return pointInSphere;
+    return point;
   }
 
   protected void enableMaterial() {
@@ -88,11 +87,12 @@ public abstract class ParticleSystem implements Observer {
 
   public void draw() {
     enableMaterial();
+    
     texture.bind(gl);
 
     spawnParticles();
-    Collections.sort(particles);
-
+    // Collections.sort(particles);
+    
     gl.glEnable(GL_BLEND);
     gl.glDepthMask(false);
 
@@ -162,11 +162,11 @@ public abstract class ParticleSystem implements Observer {
     this.fadeUnit = fadeUnit;
   }
 
-  public float getDirectionVectorScalar() {
-    return directionVectorScalar;
+  public float getScalar() {
+    return scalar;
   }
 
-  public void setDirectionVectorScalar(float directionVectorScalar) {
-    this.directionVectorScalar = directionVectorScalar;
+  public void setScalar(float scalar) {
+    this.scalar = scalar;
   }
 }
