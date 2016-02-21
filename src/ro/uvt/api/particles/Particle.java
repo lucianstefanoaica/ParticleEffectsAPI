@@ -7,13 +7,10 @@ import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
-
 import javax.media.opengl.GL2;
-
 import ro.uvt.api.util.Calculator;
-import ro.uvt.api.util.MaterialProperties;
+import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
-
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
@@ -36,10 +33,10 @@ public class Particle implements Comparable<Particle> {
   protected Vertex acceleration;
   protected float lifespan;
 
-  private MaterialProperties material;
+  private Material material;
 
   public Particle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
-                  float fade, MaterialProperties material) {
+                  float fade, Material material) {
     this.particlePosition = position;
     this.particleRadius = radius;
     computeCornerCoordinates(this.particlePosition, this.particleRadius);
@@ -78,7 +75,7 @@ public class Particle implements Comparable<Particle> {
     // this will not work when lighting is enabled
     // gl.glColor4f(0.0f, 0.0f, 0.0f, lifespan);
 
-    material.decreaseAlphaComponent(fadeUnit);
+    material.decreaseAlpha(fadeUnit);
 
     gl.glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.getDiffuse(), 0);
     gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.getSpecular(), 0);

@@ -1,28 +1,28 @@
 
 package ro.uvt.api.util;
 
-public class MaterialProperties {
+public class Material {
 
   private float ambient[];
   private float diffuse[];
   private float specular[];
   private float shine[];
 
-  public MaterialProperties(float[] ambient, float[] diffuse, float[] specular, float[] shine) {
+  public Material(float[] ambient, float[] diffuse, float[] specular, float[] shine) {
     this.ambient = ambient;
     this.diffuse = diffuse;
     this.specular = specular;
     this.shine = shine;
   }
 
-  public void decreaseAlphaComponent(float fadeUnit) {
+  public Material clone() {
+    return new Material(ambient.clone(), diffuse.clone(), specular.clone(), shine.clone());
+  }
+
+  public void decreaseAlpha(float fadeUnit) {
     ambient[3] -= fadeUnit;
     diffuse[3] -= fadeUnit;
     specular[3] -= fadeUnit;
-  }
-
-  public MaterialProperties clone() {
-    return new MaterialProperties(ambient.clone(), diffuse.clone(), specular.clone(), shine.clone());
   }
 
   public float[] getAmbient() {

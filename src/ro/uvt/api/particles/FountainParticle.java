@@ -2,10 +2,8 @@
 package ro.uvt.api.particles;
 
 import javax.media.opengl.GL2;
-
-import ro.uvt.api.util.MaterialProperties;
+import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
-
 import com.jogamp.opengl.util.texture.Texture;
 
 public class FountainParticle extends Particle {
@@ -17,7 +15,7 @@ public class FountainParticle extends Particle {
   private float radiusStep = 0.01f;
 
   public FountainParticle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
-                          float fade, MaterialProperties material) {
+                          float fade, Material material) {
     super(gl, position, speed, acceleration, cameraPosition, cameraAngle, texture, radius, fade, material);
   }
 

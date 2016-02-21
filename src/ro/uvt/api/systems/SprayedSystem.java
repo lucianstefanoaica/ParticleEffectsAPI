@@ -5,7 +5,7 @@ import javax.media.opengl.GL2;
 
 import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
-import ro.uvt.api.util.MaterialProperties;
+import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -14,7 +14,7 @@ public class SprayedSystem extends ParticleSystem {
 
   private Vertex backupPosition = null;
 
-  public SprayedSystem(GL2 gl, Vertex[] positions, Texture texture, MaterialProperties material, float systemRadius) {
+  public SprayedSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
     super(gl, positions, texture, material, systemRadius);
     backupPosition = new Vertex(destination.getPositionX(), destination.getPositionY(), destination.getPositionZ());
   }

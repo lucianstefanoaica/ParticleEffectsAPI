@@ -5,7 +5,7 @@ import javax.media.opengl.GL2;
 
 import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
-import ro.uvt.api.util.MaterialProperties;
+import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -18,7 +18,7 @@ public class ReversedSystem extends ParticleSystem {
 
   private Vertex backupPosition = null;
 
-  public ReversedSystem(GL2 gl, Vertex[] positions, Texture texture, MaterialProperties material, float systemRadius) {
+  public ReversedSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
     super(gl, positions, texture, material, systemRadius);
     backupPosition = new Vertex(source.getPositionX(), source.getPositionY(), source.getPositionZ());
   }
@@ -30,7 +30,8 @@ public class ReversedSystem extends ParticleSystem {
 
       generateParticleDirectionVector();
 
-      Particle particle = new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
+      Particle particle =
+        new Particle(gl, startPosition, startSpeed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
 
       particles.add(particle);
     }
