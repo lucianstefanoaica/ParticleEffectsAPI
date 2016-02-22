@@ -3,7 +3,6 @@ package ro.uvt.api.systems;
 
 import javax.media.opengl.GL2;
 
-import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
@@ -19,25 +18,13 @@ public class SprayedSystem extends ParticleSystem {
     backupPosition = new Vertex(destination.getPositionX(), destination.getPositionY(), destination.getPositionZ());
   }
 
-  protected void spawnParticles() {
-    for (int i = 0; i < particlesPerSpawn; ++i) {
-
-      Vertex loc = source.clone();
-      Vertex speed = new Vertex(0.0f, 0.0f, 0.0f);
-
-      Vertex acceleration = generateMovementVector();
-
-      Particle particle = new Particle(gl, loc, speed, acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
-
-      particles.add(particle);
-    }
-  }
-
-  private Vertex generateMovementVector() {
+  protected void generateParticleDirectionVector() {
     Vertex pointInSphere = generatePointInSphere(destination, backupPosition);
 
     Vertex movementVector = Calculator.subtract(pointInSphere, source);
 
-    return Calculator.scaleDown(movementVector, scalar);
+    acceleration = Calculator.scaleDown(movementVector, scalar);
+
+    startPosition = source.clone();
   }
 }

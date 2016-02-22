@@ -2,6 +2,7 @@
 package ro.uvt.api.util;
 
 public class Vertex {
+
   private float positionX;
   private float positionY;
   private float positionZ;
@@ -15,13 +16,13 @@ public class Vertex {
 
   private int index;
 
+  public Vertex() {
+  }
+
   public Vertex(float positionX, float positionY, float positionZ) {
     this.positionX = positionX;
     this.positionY = positionY;
     this.positionZ = positionZ;
-  }
-
-  public Vertex() {
   }
 
   public Vertex add(Vertex vector) {
@@ -31,6 +32,12 @@ public class Vertex {
 
     return this;
   }
+
+  public Vertex clone() {
+    return new Vertex(positionX, positionY, positionZ);
+  }
+
+  // getters & setters
 
   public float getPositionX() {
     return positionX;
@@ -102,15 +109,5 @@ public class Vertex {
 
   public void setIndex(int index) {
     this.index = index;
-  }
-
-  @Override
-  public String toString() {
-    return "Vertex [positionX=" + positionX + ", positionY=" + positionY + ", positionZ=" + positionZ + ", textureU=" + textureU + ", textureV=" + textureV
-      + ", normalX=" + normalX + ", normalY=" + normalY + ", normalZ=" + normalZ + ", index=" + index + "]";
-  }
-
-  public Vertex clone() {
-    return new Vertex(positionX, positionY, positionZ);
   }
 }

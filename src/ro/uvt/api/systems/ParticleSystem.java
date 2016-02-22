@@ -2,15 +2,13 @@
 package ro.uvt.api.systems;
 
 import static javax.media.opengl.GL.GL_BLEND;
-import static javax.media.opengl.GL.GL_FRONT;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.media.opengl.GL2;
+
 import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
@@ -24,7 +22,6 @@ public abstract class ParticleSystem implements Observer {
 
   private float systemRadius;
   protected Material material;
-
   protected GL2 gl;
   protected List<Particle> particles = new ArrayList<>();
   protected Texture texture;
@@ -34,9 +31,16 @@ public abstract class ParticleSystem implements Observer {
   protected Vertex source;
   protected Vertex destination;
   protected float particleRadius = 0.08f;
-
   protected float fadeUnit = 0.07f;
   protected float scalar = 400f;
+
+  protected Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
+
+  protected Vertex acceleration;
+
+  private Vertex startSpeed = new Vertex(0.0f, 0.0f, 0.0f);
+
+  protected Vertex startPosition;
 
   protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
     this.gl = gl;
@@ -47,8 +51,6 @@ public abstract class ParticleSystem implements Observer {
     this.material = material;
     this.systemRadius = systemRadius;
   }
-
-  protected abstract void spawnParticles();
 
   protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
     Vertex point = null;
@@ -75,20 +77,12 @@ public abstract class ParticleSystem implements Observer {
     return point;
   }
 
-  protected void enableMaterial() {
-    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, material.getDiffuse(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, material.getSpecular(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, material.getAmbient(), 0);
-    gl.glMaterialfv(GL_FRONT, GL_SHININESS, material.getShine(), 0);
-  }
-
   public void draw() {
-    enableMaterial();
+    material.bind(gl);
 
     texture.bind(gl);
 
     spawnParticles();
-    // Collections.sort(particles);
 
     gl.glEnable(GL_BLEND);
     gl.glDepthMask(false);
@@ -117,6 +111,21 @@ public abstract class ParticleSystem implements Observer {
       particle.setCameraPosition(cameraPosition);
     }
   }
+
+  protected void spawnParticles() {
+    for (int i = 0; i < particlesPerSpawn; ++i) {
+      generateParticleDirectionVector();
+
+      Particle particle =
+        new Particle(gl, startPosition, startSpeed.clone(), acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
+
+      particle.setGravityVector(gravityVector);
+
+      particles.add(particle);
+    }
+  }
+
+  protected abstract void generateParticleDirectionVector();
 
   // getters & setters
   public float getSystemRadius() {
@@ -165,5 +174,13 @@ public abstract class ParticleSystem implements Observer {
 
   public void setScalar(float scalar) {
     this.scalar = scalar;
+  }
+
+  public Vertex getGravityVector() {
+    return gravityVector;
+  }
+
+  public void setGravityVector(Vertex gravityVector) {
+    this.gravityVector = gravityVector;
   }
 }

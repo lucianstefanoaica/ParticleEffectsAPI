@@ -1,6 +1,14 @@
 
 package ro.uvt.api.util;
 
+import javax.media.opengl.GL2;
+
+import static javax.media.opengl.GL.GL_FRONT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
+
 public class Material {
 
   private float ambient[];
@@ -25,6 +33,14 @@ public class Material {
     specular[3] -= fadeUnit;
   }
 
+  public void bind(GL2 gl) {
+    gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse, 0);
+    gl.glMaterialfv(GL_FRONT, GL_SPECULAR, specular, 0);
+    gl.glMaterialfv(GL_FRONT, GL_AMBIENT, ambient, 0);
+    gl.glMaterialfv(GL_FRONT, GL_SHININESS, shine, 0);
+  }
+
+  // getters and setters
   public float[] getAmbient() {
     return ambient;
   }

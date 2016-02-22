@@ -1,16 +1,18 @@
 
 package ro.uvt.api.particles;
 
-// import static javax.media.opengl.GL.GL_FRONT;
 import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
 import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
+
 import javax.media.opengl.GL2;
+
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
+
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
@@ -34,6 +36,8 @@ public class Particle implements Comparable<Particle> {
   protected float lifespan;
 
   private Material material;
+
+  private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
 
   public Particle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, Vertex cameraPosition, double cameraAngle, Texture texture, float radius,
                   float fade, Material material) {
@@ -66,14 +70,13 @@ public class Particle implements Comparable<Particle> {
     lifespan -= fadeUnit;
     // I don't want particles to grow right now
     // particleRadius += 0.001f;
+
+    acceleration.add(gravityVector);
   }
 
   public void draw() {
     computeCornerCoordinates(particlePosition, particleRadius);
     computeCameraDistance();
-
-    // this will not work when lighting is enabled
-    // gl.glColor4f(0.0f, 0.0f, 0.0f, lifespan);
 
     material.decreaseAlpha(fadeUnit);
 
@@ -130,9 +133,7 @@ public class Particle implements Comparable<Particle> {
     float bottomTex = textureCoords.bottom();
 
     gl.glPushMatrix();
-
     gl.glBegin(GL_TRIANGLE_STRIP);
-
     gl.glTexCoord2d(rightTex, bottomTex);
     gl.glVertex3f(rightBottom.getPositionX(), rightBottom.getPositionY(), rightBottom.getPositionZ());
 
@@ -144,9 +145,7 @@ public class Particle implements Comparable<Particle> {
 
     gl.glTexCoord2d(leftTex, topTex);
     gl.glVertex3f(leftTop.getPositionX(), leftTop.getPositionY(), leftTop.getPositionZ());
-
     gl.glEnd();
-
     gl.glPopMatrix();
   }
 
@@ -177,5 +176,13 @@ public class Particle implements Comparable<Particle> {
 
   public void setCameraAngle(double cameraAngle) {
     this.cameraAngle = cameraAngle;
+  }
+
+  public Vertex getGravityVector() {
+    return gravityVector;
+  }
+
+  public void setGravityVector(Vertex gravityVector) {
+    this.gravityVector = gravityVector;
   }
 }
