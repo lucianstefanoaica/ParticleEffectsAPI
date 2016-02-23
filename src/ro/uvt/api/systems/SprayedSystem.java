@@ -11,15 +11,13 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class SprayedSystem extends ParticleSystem {
 
-  private Vertex backupPosition = null;
-
   public SprayedSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
     super(gl, positions, texture, material, systemRadius);
-    backupPosition = new Vertex(destination.getPositionX(), destination.getPositionY(), destination.getPositionZ());
+    aBackupPosition = new Vertex(destination.getPositionX(), destination.getPositionY(), destination.getPositionZ());
   }
 
   protected void generateParticleDirectionVector() {
-    Vertex pointInSphere = generatePointInSphere(destination, backupPosition);
+    Vertex pointInSphere = generatePointInSphere(destination, aBackupPosition);
 
     Vertex movementVector = Calculator.subtract(pointInSphere, source);
 

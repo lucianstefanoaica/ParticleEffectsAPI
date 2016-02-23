@@ -1,46 +1,41 @@
 
 package ro.uvt.api.systems;
 
-import static javax.media.opengl.GL.GL_BLEND;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import javax.media.opengl.GL2;
-
 import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Observer;
 import ro.uvt.api.util.Subject;
 import ro.uvt.api.util.Vertex;
-
 import com.jogamp.opengl.util.texture.Texture;
+
+import static javax.media.opengl.GL.GL_BLEND;
 
 public abstract class ParticleSystem implements Observer {
 
   private float systemRadius;
-  protected Material material;
-  protected GL2 gl;
-  protected List<Particle> particles = new ArrayList<>();
-  protected Texture texture;
-  protected Vertex cameraPosition;
-  protected double cameraAngle = 0.0f;
-  protected int particlesPerSpawn = 350;
+  private Material material;
+  private GL2 gl;
+  private List<Particle> particles = new ArrayList<>();
+  private Texture texture;
+  private Vertex cameraPosition;
+  private double cameraAngle = 0.0f;
+  private int particlesPerSpawn = 350;
+  private float particleRadius = 0.08f;
+  private float fadeUnit = 0.07f;
+  private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
+  private Vertex startSpeed = new Vertex(0.0f, 0.0f, 0.0f);
+  
+  protected Vertex aBackupPosition;
+  protected Vertex startPosition;
+  protected float scalar = 400f;
   protected Vertex source;
   protected Vertex destination;
-  protected float particleRadius = 0.08f;
-  protected float fadeUnit = 0.07f;
-  protected float scalar = 400f;
-
-  protected Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
-
   protected Vertex acceleration;
-
-  private Vertex startSpeed = new Vertex(0.0f, 0.0f, 0.0f);
-
-  protected Vertex startPosition;
 
   protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
     this.gl = gl;
@@ -51,6 +46,8 @@ public abstract class ParticleSystem implements Observer {
     this.material = material;
     this.systemRadius = systemRadius;
   }
+
+  protected abstract void generateParticleDirectionVector();
 
   protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
     Vertex point = null;
@@ -112,7 +109,7 @@ public abstract class ParticleSystem implements Observer {
     }
   }
 
-  protected void spawnParticles() {
+  private void spawnParticles() {
     for (int i = 0; i < particlesPerSpawn; ++i) {
       generateParticleDirectionVector();
 
@@ -124,8 +121,6 @@ public abstract class ParticleSystem implements Observer {
       particles.add(particle);
     }
   }
-
-  protected abstract void generateParticleDirectionVector();
 
   // getters & setters
   public float getSystemRadius() {

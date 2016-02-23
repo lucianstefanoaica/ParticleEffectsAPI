@@ -17,7 +17,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
 public class Particle implements Comparable<Particle> {
-  // test
+  
   private GL2 gl;
   private Vertex leftBottom;
   private Vertex rightBottom;
