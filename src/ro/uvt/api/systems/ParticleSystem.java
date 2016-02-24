@@ -2,34 +2,30 @@
 package ro.uvt.api.systems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.media.opengl.GL2;
 import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
-import ro.uvt.api.util.Observer;
-import ro.uvt.api.util.Subject;
 import ro.uvt.api.util.Vertex;
 import com.jogamp.opengl.util.texture.Texture;
 
 import static javax.media.opengl.GL.GL_BLEND;
 
-public abstract class ParticleSystem implements Observer {
+public abstract class ParticleSystem {
 
+  private GL2 gl;
   private float systemRadius;
   private Material material;
-  private GL2 gl;
   private List<Particle> particles = new ArrayList<>();
   private Texture texture;
-  private Vertex cameraPosition;
-  private double cameraAngle = 0.0f;
+  private float cameraAngle = 0.0f;
   private int particlesPerSpawn = 350;
   private float particleRadius = 0.08f;
   private float fadeUnit = 0.07f;
   private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
   private Vertex startSpeed = new Vertex(0.0f, 0.0f, 0.0f);
-  
+
   protected Vertex aBackupPosition;
   protected Vertex startPosition;
   protected float scalar = 400f;
@@ -41,7 +37,6 @@ public abstract class ParticleSystem implements Observer {
     this.gl = gl;
     this.source = positions[0];
     this.destination = positions[1];
-    this.cameraPosition = positions[2];
     this.texture = texture;
     this.material = material;
     this.systemRadius = systemRadius;
@@ -51,7 +46,6 @@ public abstract class ParticleSystem implements Observer {
 
   protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
     Vertex point = null;
-
     for (int i = 1; i <= 5; ++i) {
       float xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
       float yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
@@ -70,26 +64,19 @@ public abstract class ParticleSystem implements Observer {
         }
       }
     }
-
     return point;
   }
 
-  public void draw() {
+  public void draw(float angle) {
     material.bind(gl);
-
     texture.bind(gl);
-
     spawnParticles();
-
     gl.glEnable(GL_BLEND);
     gl.glDepthMask(false);
-
     for (int index = particles.size() - 1; index >= 0; --index) {
       Particle aParticle = particles.get(index);
-
-      aParticle.draw();
+      aParticle.draw(angle);
       aParticle.move();
-
       if (aParticle.died()) {
         particles.remove(index);
       }
@@ -97,24 +84,11 @@ public abstract class ParticleSystem implements Observer {
     gl.glDepthMask(true);
   }
 
-  @Override
-  public void update(Subject toObserve) {
-    HashMap<String, Object> subjectState = toObserve.getState();
-    cameraPosition = (Vertex) subjectState.get("camera_position");
-    cameraAngle = (Double) subjectState.get("camera_angle");
-
-    for (Particle particle : particles) {
-      particle.setCameraAngle(cameraAngle);
-      particle.setCameraPosition(cameraPosition);
-    }
-  }
-
   private void spawnParticles() {
     for (int i = 0; i < particlesPerSpawn; ++i) {
       generateParticleDirectionVector();
 
-      Particle particle =
-        new Particle(gl, startPosition, startSpeed.clone(), acceleration, cameraPosition, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
+      Particle particle = new Particle(gl, startPosition, startSpeed.clone(), acceleration, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
 
       particle.setGravityVector(gravityVector);
 
