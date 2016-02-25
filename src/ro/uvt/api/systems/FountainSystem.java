@@ -2,9 +2,11 @@
 package ro.uvt.api.systems;
 
 import javax.media.opengl.GL2;
+
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
+
 import com.jogamp.opengl.util.texture.Texture;
 
 public class FountainSystem extends ParticleSystem {

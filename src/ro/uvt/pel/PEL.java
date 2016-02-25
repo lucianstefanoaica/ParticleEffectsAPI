@@ -2,106 +2,107 @@
 package ro.uvt.pel;
 
 import javax.media.opengl.GL2;
+
 import ro.uvt.api.systems.CylindricalSystem;
 import ro.uvt.api.systems.FountainSystem;
+import ro.uvt.api.systems.ParticleSystem;
 import ro.uvt.api.systems.ReversedSystem;
 import ro.uvt.api.systems.SprayedSystem;
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
+
 import com.jogamp.opengl.util.texture.Texture;
 
 public class PEL {
 
-  private SprayedSystem sprayed;
-  private CylindricalSystem cylindrical;
-  private ReversedSystem reversed;
-  private FountainSystem fountain;
+  private ParticleSystem system;
+  private GL2 gl;
 
-  public void pelDrawSprayedSystem(GL2 gl,
-                                   Vertex[] positions,
+  public PEL(GL2 gl) {
+    this.gl = gl;
+  }
+
+  public void pelDrawSprayedSystem(Vertex[] positions,
                                    Texture texture,
                                    Material material,
                                    float systemRadius,
-                                   int pps,
-                                   float pr,
-                                   float fu,
+                                   int particlesPerSpawn,
+                                   float particleRadius,
+                                   float fadeUnit,
                                    float scalar,
                                    float angle) {
-    if (sprayed == null) {
-      sprayed = new SprayedSystem(gl, positions, texture, material, systemRadius);
-      sprayed.setParticlesPerSpawn(pps);
-      sprayed.setParticleRadius(pr);
-      sprayed.setFadeUnit(fu);
-      sprayed.setScalar(scalar);
+    if (system instanceof SprayedSystem == false) {
+      system = new SprayedSystem(gl, positions, texture, material, systemRadius);
+      system.setParticlesPerSpawn(particlesPerSpawn);
+      system.setParticleRadius(particleRadius);
+      system.setFadeUnit(fadeUnit);
+      system.setScalar(scalar);
     }
 
-    sprayed.draw(angle);
+    system.draw(angle);
   }
 
-  public void pelDrawCylindricalSystem(GL2 gl,
-                                       Vertex[] positions,
+  public void pelDrawCylindricalSystem(Vertex[] positions,
                                        Texture texture,
                                        Material material,
                                        float systemRadius,
-                                       int pps,
-                                       float pr,
-                                       float fu,
+                                       int particlesPerSpawn,
+                                       float particleRadius,
+                                       float fadeUnit,
                                        float scalar,
                                        float angle) {
-    if (cylindrical == null) {
-      cylindrical = new CylindricalSystem(gl, positions, texture, material, systemRadius);
-      cylindrical.setParticlesPerSpawn(pps);
-      cylindrical.setParticleRadius(pr);
-      cylindrical.setFadeUnit(fu);
-      cylindrical.setScalar(scalar);
+    if (system instanceof CylindricalSystem == false) {
+      system = new CylindricalSystem(gl, positions, texture, material, systemRadius);
+      system.setParticlesPerSpawn(particlesPerSpawn);
+      system.setParticleRadius(particleRadius);
+      system.setFadeUnit(fadeUnit);
+      system.setScalar(scalar);
     }
 
-    cylindrical.draw(angle);
+    system.draw(angle);
   }
 
-  public void pelDrawReversedSystem(GL2 gl,
-                                    Vertex[] positions,
+  public void pelDrawReversedSystem(Vertex[] positions,
                                     Texture texture,
                                     Material material,
                                     float systemRadius,
-                                    int pps,
-                                    float pr,
-                                    float fu,
+                                    int particlesPerSpawn,
+                                    float particleRadius,
+                                    float fadeUnit,
                                     float scalar,
                                     float angle) {
 
-    if (reversed == null) {
-      reversed = new ReversedSystem(gl, positions, texture, material, systemRadius);
-      reversed.setParticlesPerSpawn(pps);
-      reversed.setParticleRadius(pr);
-      reversed.setFadeUnit(fu);
-      reversed.setScalar(scalar);
+    if (system instanceof ReversedSystem == false) {
+      system = new ReversedSystem(gl, positions, texture, material, systemRadius);
+      system.setParticlesPerSpawn(particlesPerSpawn);
+      system.setParticleRadius(particleRadius);
+      system.setFadeUnit(fadeUnit);
+      system.setScalar(scalar);
     }
 
-    reversed.draw(angle);
+    system.draw(angle);
   }
 
-  public void pelDrawFountainSystem(GL2 gl,
-                                    Vertex[] positions,
+  public void pelDrawFountainSystem(Vertex[] positions,
                                     Texture texture,
                                     Material material,
                                     float systemRadius,
-                                    int pps,
-                                    float pr,
-                                    float fu,
+                                    int particlesPerSpawn,
+                                    float particleRadius,
+                                    float fadeUnit,
                                     float scalar,
                                     float angle,
                                     Vertex gravity) {
 
-    if (fountain == null) {
-      fountain = new FountainSystem(gl, positions, texture, material, systemRadius);
-      fountain.setParticlesPerSpawn(pps);
-      fountain.setParticleRadius(pr);
-      fountain.setFadeUnit(fu);
-      fountain.setScalar(scalar);
-      fountain.setGravityVector(gravity);
+    if (system instanceof FountainSystem == false) {
+      system = new FountainSystem(gl, positions, texture, material, systemRadius);
+      system.setParticlesPerSpawn(particlesPerSpawn);
+      system.setParticleRadius(particleRadius);
+      system.setFadeUnit(fadeUnit);
+      system.setScalar(scalar);
+      system.setGravityVector(gravity);
     }
 
-    fountain.draw(angle);
+    system.draw(angle);
   }
 }

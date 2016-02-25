@@ -1,16 +1,19 @@
 
 package ro.uvt.api.systems;
 
+import static javax.media.opengl.GL.GL_BLEND;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.media.opengl.GL2;
+
 import ro.uvt.api.particles.Particle;
 import ro.uvt.api.util.Calculator;
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
-import com.jogamp.opengl.util.texture.Texture;
 
-import static javax.media.opengl.GL.GL_BLEND;
+import com.jogamp.opengl.util.texture.Texture;
 
 public abstract class ParticleSystem {
 
@@ -19,7 +22,7 @@ public abstract class ParticleSystem {
   private Material material;
   private List<Particle> particles = new ArrayList<>();
   private Texture texture;
-  private float cameraAngle = 0.0f;
+  private float cameraAngle;
   private int particlesPerSpawn = 350;
   private float particleRadius = 0.08f;
   private float fadeUnit = 0.07f;
@@ -67,7 +70,6 @@ public abstract class ParticleSystem {
   }
 
   public void draw(float angle) {
-    material.bind(gl);
     texture.bind(gl);
     spawnParticles();
     gl.glEnable(GL_BLEND);

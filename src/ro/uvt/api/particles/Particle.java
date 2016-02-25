@@ -1,17 +1,15 @@
 
 package ro.uvt.api.particles;
 
+import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
+
 import javax.media.opengl.GL2;
+
 import ro.uvt.api.util.Material;
 import ro.uvt.api.util.Vertex;
+
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
-
-import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
-import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 public class Particle {
 
@@ -60,9 +58,7 @@ public class Particle {
 
     material.decreaseAlpha(fadeUnit);
 
-    gl.glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.getDiffuse(), 0);
-    gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.getSpecular(), 0);
-    gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.getAmbient(), 0);
+    material.bind(gl);
 
     drawCorners();
   }
