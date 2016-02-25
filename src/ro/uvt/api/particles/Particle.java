@@ -25,17 +25,15 @@ public class Particle {
   private Material material;
   private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
 
-  protected float particleRadius;
-  protected Vertex particlePosition;
-  protected Vertex speed;
-  protected Vertex acceleration;
-  protected float lifespan;
+  private float particleRadius;
+  private Vertex particlePosition;
+  private Vertex speed;
+  private float lifespan;
 
-  public Particle(GL2 gl, Vertex position, Vertex speed, Vertex acceleration, float cameraAngle, Texture texture, float radius, float fade, Material material) {
+  public Particle(GL2 gl, Vertex position, Vertex speed, float cameraAngle, Texture texture, float radius, float fade, Material material) {
     this.particlePosition = position;
     this.particleRadius = radius;
 
-    this.acceleration = acceleration;
     this.speed = speed;
 
     this.material = material;
@@ -50,13 +48,11 @@ public class Particle {
   }
 
   public void move() {
-    speed.add(acceleration);
-    particlePosition.add(acceleration);
+    speed.add(gravityVector);
+    particlePosition.add(speed);
     lifespan -= fadeUnit;
     // I don't want particles to grow right now
     // particleRadius += 0.001f;
-
-    acceleration.add(gravityVector);
   }
 
   public void draw(float cameraAngle) {

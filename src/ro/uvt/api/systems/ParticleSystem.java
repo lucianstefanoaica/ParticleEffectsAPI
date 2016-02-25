@@ -24,14 +24,13 @@ public abstract class ParticleSystem {
   private float particleRadius = 0.08f;
   private float fadeUnit = 0.07f;
   private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
-  private Vertex startSpeed = new Vertex(0.0f, 0.0f, 0.0f);
 
   protected Vertex aBackupPosition;
   protected Vertex startPosition;
   protected float scalar = 400f;
   protected Vertex source;
   protected Vertex destination;
-  protected Vertex acceleration;
+  protected Vertex speed;
 
   protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
     this.gl = gl;
@@ -88,7 +87,7 @@ public abstract class ParticleSystem {
     for (int i = 0; i < particlesPerSpawn; ++i) {
       generateParticleDirectionVector();
 
-      Particle particle = new Particle(gl, startPosition, startSpeed.clone(), acceleration, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
+      Particle particle = new Particle(gl, startPosition, speed, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
 
       particle.setGravityVector(gravityVector);
 

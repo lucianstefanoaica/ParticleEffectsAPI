@@ -19,7 +19,7 @@ public class FountainSystem extends ParticleSystem {
 
     Vertex differenceVector = Calculator.subtract(pointInSphere, source);
 
-    acceleration = Calculator.scaleDown(differenceVector, scalar);
+    speed = Calculator.scaleDown(differenceVector, scalar);
 
     startPosition = source.clone();
   }

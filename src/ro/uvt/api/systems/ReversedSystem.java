@@ -21,6 +21,6 @@ public class ReversedSystem extends ParticleSystem {
 
     Vertex differenceVector = Calculator.subtract(destination, startPosition);
 
-    acceleration = Calculator.scaleDown(differenceVector, scalar);
+    speed = Calculator.scaleDown(differenceVector, scalar);
   }
 }

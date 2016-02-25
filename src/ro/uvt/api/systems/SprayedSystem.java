@@ -21,7 +21,7 @@ public class SprayedSystem extends ParticleSystem {
 
     Vertex movementVector = Calculator.subtract(pointInSphere, source);
 
-    acceleration = Calculator.scaleDown(movementVector, scalar);
+    speed = Calculator.scaleDown(movementVector, scalar);
 
     startPosition = source.clone();
   }
