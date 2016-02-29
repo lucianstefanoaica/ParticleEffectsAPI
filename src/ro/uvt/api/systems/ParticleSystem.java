@@ -1,8 +1,6 @@
 
 package ro.uvt.api.systems;
 
-import static javax.media.opengl.GL.GL_BLEND;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +70,6 @@ public abstract class ParticleSystem {
   public void draw(float angle) {
     texture.bind(gl);
     spawnParticles();
-    gl.glEnable(GL_BLEND);
     gl.glDepthMask(false);
     for (int index = particles.size() - 1; index >= 0; --index) {
       Particle aParticle = particles.get(index);
