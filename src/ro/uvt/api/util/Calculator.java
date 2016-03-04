@@ -62,7 +62,7 @@ public class Calculator {
     return new Vertex(a, b, c);
   }
 
-  public static Vertex scaleUp(Vertex vector, int scale) {
+  public static Vertex scaleUp(Vertex vector, float scale) {
     float a = vector.getPositionX() * scale;
     float b = vector.getPositionY() * scale;
     float c = vector.getPositionZ() * scale;

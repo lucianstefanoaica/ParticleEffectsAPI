@@ -17,7 +17,7 @@ public class FountainSystem extends ParticleSystem {
   }
 
   protected void generateParticleDirectionVector() {
-    Vertex pointInSphere = generatePointInSphere(destination, aBackupPosition);
+    Vertex pointInSphere = generatePointInSphere(destination, aBackupPosition, systemRadius);
 
     Vertex differenceVector = Calculator.subtract(pointInSphere, source);
 

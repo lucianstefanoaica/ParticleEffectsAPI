@@ -17,7 +17,7 @@ public class CylindricalSystem extends ParticleSystem {
   }
 
   protected void generateParticleDirectionVector() {
-    Vertex pointInFirstSphere = generatePointInSphere(source, aBackupPosition);
+    Vertex pointInFirstSphere = generatePointInSphere(source, aBackupPosition, systemRadius);
     Vertex pointInSecondSphere = Calculator.add(destination, Calculator.subtract(pointInFirstSphere, source));
 
     Vertex differenceVector = Calculator.subtract(pointInSecondSphere, pointInFirstSphere);

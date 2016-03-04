@@ -17,12 +17,10 @@ public class SprayedSystem extends ParticleSystem {
   }
 
   protected void generateParticleDirectionVector() {
-    Vertex pointInSphere = generatePointInSphere(destination, aBackupPosition);
-
+    Vertex pointInSphere = generatePointInSphere(destination, aBackupPosition, systemRadius);
     Vertex movementVector = Calculator.subtract(pointInSphere, source);
 
     speed = Calculator.scaleDown(movementVector, scalar);
-
     startPosition = source.clone();
   }
 }

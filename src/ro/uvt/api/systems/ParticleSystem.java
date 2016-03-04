@@ -1,4 +1,3 @@
-
 package ro.uvt.api.systems;
 
 import java.util.ArrayList;
@@ -15,139 +14,145 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public abstract class ParticleSystem {
 
-  private GL2 gl;
-  private float systemRadius;
-  private Material material;
-  private List<Particle> particles = new ArrayList<>();
-  private Texture texture;
-  private float cameraAngle;
-  private int particlesPerSpawn = 350;
-  private float particleRadius = 0.08f;
-  private float fadeUnit = 0.07f;
-  private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
+    private GL2 gl;
+    private Material material;
+    private List<Particle> particles = new ArrayList<>();
+    private Texture texture;
+    private float cameraAngle;
+    private int particlesPerSpawn = 350;
+    private float particleRadius = 0.08f;
+    private float fadeUnit = 0.07f;
+    private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
 
-  protected Vertex aBackupPosition;
-  protected Vertex startPosition;
-  protected float scalar = 400f;
-  protected Vertex source;
-  protected Vertex destination;
-  protected Vertex speed;
+    protected Vertex aBackupPosition;
+    protected Vertex startPosition;
+    protected float scalar = 400f;
+    protected Vertex source;
+    protected Vertex destination;
+    protected Vertex speed;
+    protected float systemRadius;
 
-  protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
-    this.gl = gl;
-    this.source = positions[0];
-    this.destination = positions[1];
-    this.texture = texture;
-    this.material = material;
-    this.systemRadius = systemRadius;
-  }
-
-  protected abstract void generateParticleDirectionVector();
-
-  protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup) {
-    Vertex point = null;
-    for (int i = 1; i <= 5; ++i) {
-      float xVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-      float yVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-      float zVal = Calculator.getRandomNumberInRange(-systemRadius, systemRadius);
-
-      point = Calculator.add(sphereCenter, new Vertex(xVal, yVal, zVal));
-
-      if (Calculator.computeDistance(sphereCenter, point) <= systemRadius) {
-        backup.setPositionX(point.getPositionX());
-        backup.setPositionY(point.getPositionY());
-        backup.setPositionZ(point.getPositionZ());
-        break;
-      } else {
-        if (i == 5) {
-          point = new Vertex(backup.getPositionX(), backup.getPositionY(), backup.getPositionZ());
-        }
-      }
+    protected ParticleSystem(GL2 gl, Vertex[] positions, Texture texture,
+	    Material material, float systemRadius) {
+	this.gl = gl;
+	this.source = positions[0];
+	this.destination = positions[1];
+	this.texture = texture;
+	this.material = material;
+	this.systemRadius = systemRadius;
     }
-    return point;
-  }
 
-  public void draw(float angle) {
-    texture.bind(gl);
-    spawnParticles();
-    gl.glDepthMask(false);
-    for (int index = particles.size() - 1; index >= 0; --index) {
-      Particle aParticle = particles.get(index);
-      aParticle.draw(angle);
-      aParticle.move();
-      if (aParticle.died()) {
-        particles.remove(index);
-      }
+    protected abstract void generateParticleDirectionVector();
+
+    protected Vertex generatePointInSphere(Vertex sphereCenter, Vertex backup,
+	    float radius) {
+	Vertex point = null;
+
+	for (int i = 1; i <= 5; ++i) {
+	    float xVal = Calculator.getRandomNumberInRange(-radius, radius);
+	    float yVal = Calculator.getRandomNumberInRange(-radius, radius);
+	    float zVal = Calculator.getRandomNumberInRange(-radius, radius);
+
+	    point = Calculator.add(sphereCenter, new Vertex(xVal, yVal, zVal));
+
+	    if (Calculator.computeDistance(sphereCenter, point) <= radius) {
+		backup.setPositionX(point.getPositionX());
+		backup.setPositionY(point.getPositionY());
+		backup.setPositionZ(point.getPositionZ());
+		break;
+	    } else {
+		if (i == 5) {
+		    point = new Vertex(backup.getPositionX(),
+			    backup.getPositionY(), backup.getPositionZ());
+		}
+	    }
+	}
+	return point;
     }
-    gl.glDepthMask(true);
-  }
 
-  private void spawnParticles() {
-    for (int i = 0; i < particlesPerSpawn; ++i) {
-      generateParticleDirectionVector();
-
-      Particle particle = new Particle(gl, startPosition, speed, cameraAngle, texture, particleRadius, fadeUnit, material.clone());
-
-      particle.setGravityVector(gravityVector);
-
-      particles.add(particle);
+    public void draw(float angle) {
+	texture.bind(gl);
+	spawnParticles();
+	gl.glDepthMask(false);
+	for (int index = particles.size() - 1; index >= 0; --index) {
+	    Particle aParticle = particles.get(index);
+	    aParticle.draw(angle);
+	    aParticle.move();
+	    if (aParticle.died()) {
+		particles.remove(index);
+	    }
+	}
+	gl.glDepthMask(true);
     }
-  }
 
-  // getters & setters
-  public float getSystemRadius() {
-    return systemRadius;
-  }
+    private void spawnParticles() {
+	for (int i = 0; i < particlesPerSpawn; ++i) {
+	    generateParticleDirectionVector();
 
-  public void setSystemRadius(float systemRadius) {
-    this.systemRadius = systemRadius;
-  }
+	    Particle particle = new Particle(gl, startPosition, speed,
+		    cameraAngle, texture, particleRadius, fadeUnit,
+		    material.clone());
 
-  public Texture getTexture() {
-    return texture;
-  }
+	    particle.setGravityVector(gravityVector);
 
-  public void setTexture(Texture texture) {
-    this.texture = texture;
-  }
+	    particles.add(particle);
+	}
+    }
 
-  public int getParticlesPerSpawn() {
-    return particlesPerSpawn;
-  }
+    // getters & setters
+    public float getSystemRadius() {
+	return systemRadius;
+    }
 
-  public void setParticlesPerSpawn(int particlesPerSpawn) {
-    this.particlesPerSpawn = particlesPerSpawn;
-  }
+    public void setSystemRadius(float systemRadius) {
+	this.systemRadius = systemRadius;
+    }
 
-  public float getParticleRadius() {
-    return particleRadius;
-  }
+    public Texture getTexture() {
+	return texture;
+    }
 
-  public void setParticleRadius(float particleRadius) {
-    this.particleRadius = particleRadius;
-  }
+    public void setTexture(Texture texture) {
+	this.texture = texture;
+    }
 
-  public float getFadeUnit() {
-    return fadeUnit;
-  }
+    public int getParticlesPerSpawn() {
+	return particlesPerSpawn;
+    }
 
-  public void setFadeUnit(float fadeUnit) {
-    this.fadeUnit = fadeUnit;
-  }
+    public void setParticlesPerSpawn(int particlesPerSpawn) {
+	this.particlesPerSpawn = particlesPerSpawn;
+    }
 
-  public float getScalar() {
-    return scalar;
-  }
+    public float getParticleRadius() {
+	return particleRadius;
+    }
 
-  public void setScalar(float scalar) {
-    this.scalar = scalar;
-  }
+    public void setParticleRadius(float particleRadius) {
+	this.particleRadius = particleRadius;
+    }
 
-  public Vertex getGravityVector() {
-    return gravityVector;
-  }
+    public float getFadeUnit() {
+	return fadeUnit;
+    }
 
-  public void setGravityVector(Vertex gravityVector) {
-    this.gravityVector = gravityVector;
-  }
+    public void setFadeUnit(float fadeUnit) {
+	this.fadeUnit = fadeUnit;
+    }
+
+    public float getScalar() {
+	return scalar;
+    }
+
+    public void setScalar(float scalar) {
+	this.scalar = scalar;
+    }
+
+    public Vertex getGravityVector() {
+	return gravityVector;
+    }
+
+    public void setGravityVector(Vertex gravityVector) {
+	this.gravityVector = gravityVector;
+    }
 }
