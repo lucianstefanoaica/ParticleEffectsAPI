@@ -12,6 +12,7 @@ import java.nio.IntBuffer;
 
 import javax.media.opengl.GL2;
 
+import ro.uvt.api.systems.CircleSystem;
 import ro.uvt.api.systems.CylindricalSystem;
 import ro.uvt.api.systems.FountainSystem;
 import ro.uvt.api.systems.LineSystem;
@@ -204,6 +205,44 @@ public class PEL {
 
 	if (system instanceof LineSystem == false) {
 	    system = new LineSystem(gl, positions, texture, material,
+		    systemRadius);
+	    system.setParticlesPerSpawn(particlesPerSpawn);
+	    system.setParticleRadius(particleRadius);
+	    system.setFadeUnit(fadeUnit);
+	    system.setScalar(scalar);
+	    system.setGravityVector(gravity);
+	}
+	system.draw(angle);
+
+	gl.glBlendFunc(previousSourceFactor.get(0),
+		previousDestinationFactor.get(0));
+	gl.glBlendEquation(previousEquation.get(0));
+	if (blendWasEnabled == false) {
+	    gl.glDisable(GL_BLEND);
+	}
+    }
+
+    public void pelDrawCircleSystem(Vertex[] positions, Texture texture,
+	    Material material, float systemRadius, int particlesPerSpawn,
+	    float particleRadius, float fadeUnit, float scalar, float angle,
+	    Vertex gravity) {
+	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
+	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
+
+	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
+	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
+
+	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
+	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
+
+	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
+
+	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	gl.glBlendEquation(GL_FUNC_ADD);
+	gl.glEnable(GL_BLEND);
+
+	if (system instanceof CircleSystem == false) {
+	    system = new CircleSystem(gl, positions, texture, material,
 		    systemRadius);
 	    system.setParticlesPerSpawn(particlesPerSpawn);
 	    system.setParticleRadius(particleRadius);
