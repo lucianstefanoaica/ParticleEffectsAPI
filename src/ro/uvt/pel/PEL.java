@@ -17,6 +17,7 @@ import ro.uvt.api.systems.CylindricalSystem;
 import ro.uvt.api.systems.FountainSystem;
 import ro.uvt.api.systems.LineSystem;
 import ro.uvt.api.systems.ParticleSystem;
+import ro.uvt.api.systems.PulseSystem;
 import ro.uvt.api.systems.ReversedSystem;
 import ro.uvt.api.systems.SprayedSystem;
 import ro.uvt.api.util.Material;
@@ -136,6 +137,25 @@ public class PEL {
 	    system.setFadeUnit(fadeUnit);
 	    system.setScalar(scalar);
 	    system.setGravityVector(gravity);
+	}
+	system.draw(angle);
+	unsetBlending();
+    }
+
+    public void pelDrawPulseSystem(Vertex[] positions, Texture texture,
+	    Material material, float systemRadius, int particlesPerSpawn,
+	    float particleRadius, float fadeUnit, float scalar, float angle,
+	    Vertex gravity) {
+	setBlending();
+	if (system instanceof PulseSystem == false) {
+	    system = new PulseSystem(gl, positions, texture, material,
+		    systemRadius);
+	    system.setParticlesPerSpawn(particlesPerSpawn);
+	    system.setParticleRadius(particleRadius);
+	    system.setFadeUnit(fadeUnit);
+	    system.setScalar(scalar);
+	    system.setGravityVector(gravity);
+	    system.setPulsate(true);
 	}
 	system.draw(angle);
 	unsetBlending();

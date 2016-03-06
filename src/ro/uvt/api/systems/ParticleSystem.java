@@ -23,6 +23,7 @@ public abstract class ParticleSystem {
     private float particleRadius = 0.08f;
     private float fadeUnit = 0.07f;
     private Vertex gravityVector = new Vertex(0.0f, 0.0f, 0.0f);
+    private boolean pulsate;
 
     protected Vertex aBackupPosition;
     protected Vertex startPosition;
@@ -72,7 +73,13 @@ public abstract class ParticleSystem {
 
     public void draw(float angle) {
 	texture.bind(gl);
-	spawnParticles();
+	if (pulsate == false) {
+	    spawnParticles();
+	} else {
+	    if (particles.isEmpty()) {
+		spawnParticles();
+	    }
+	}
 	gl.glDepthMask(false);
 	for (int index = particles.size() - 1; index >= 0; --index) {
 	    Particle aParticle = particles.get(index);
@@ -154,5 +161,13 @@ public abstract class ParticleSystem {
 
     public void setGravityVector(Vertex gravityVector) {
 	this.gravityVector = gravityVector;
+    }
+
+    public boolean isPulsate() {
+	return pulsate;
+    }
+
+    public void setPulsate(boolean pulsate) {
+	this.pulsate = pulsate;
     }
 }
