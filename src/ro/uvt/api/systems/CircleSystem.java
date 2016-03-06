@@ -22,18 +22,18 @@ public class CircleSystem extends ParticleSystem {
 
     @Override
     protected void generateParticleDirectionVector() {
-	startPosition = generatePointOnCircle(source, systemRadius);
+	startPosition = generatePointInCircle(source, systemRadius);
 	speed = new Vertex(0.0f, 0.0f, 0.0f);
     }
 
-    private Vertex generatePointOnCircle(Vertex center, float radius) {
+    private Vertex generatePointInCircle(Vertex center, float radius) {
 	float angle = rand.nextFloat() * 2 * (float) Math.PI;
+
 	Vertex pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f,
 		(float) Math.sin(angle));
+
 	Vertex scaledPoint = Calculator.scaleUp(pointOnCircle, radius);
 
-	scaledPoint.add(center);
-
-	return Calculator.scaleUp(scaledPoint, rand.nextFloat());
+	return Calculator.scaleUp(scaledPoint, rand.nextFloat()).add(center);
     }
 }

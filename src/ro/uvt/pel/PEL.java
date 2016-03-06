@@ -30,6 +30,11 @@ public class PEL {
     private ParticleSystem system;
     private GL2 gl;
 
+    private IntBuffer previousEquation;
+    private IntBuffer previousSourceFactor;
+    private IntBuffer previousDestinationFactor;
+    private boolean blendWasEnabled;
+
     public PEL(GL2 gl) {
 	this.gl = gl;
     }
@@ -37,22 +42,7 @@ public class PEL {
     public void pelDrawSprayedSystem(Vertex[] positions, Texture texture,
 	    Material material, float systemRadius, int particlesPerSpawn,
 	    float particleRadius, float fadeUnit, float scalar, float angle) {
-
-	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
-
-	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
-
-	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
-
-	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
-
-	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	gl.glBlendEquation(GL_FUNC_ADD);
-	gl.glEnable(GL_BLEND);
-
+	setBlending();
 	if (system instanceof SprayedSystem == false) {
 	    system = new SprayedSystem(gl, positions, texture, material,
 		    systemRadius);
@@ -62,34 +52,13 @@ public class PEL {
 	    system.setScalar(scalar);
 	}
 	system.draw(angle);
-
-	gl.glBlendFunc(previousSourceFactor.get(0),
-		previousDestinationFactor.get(0));
-	gl.glBlendEquation(previousEquation.get(0));
-	if (blendWasEnabled == false) {
-	    gl.glDisable(GL_BLEND);
-	}
+	unsetBlending();
     }
 
     public void pelDrawCylindricalSystem(Vertex[] positions, Texture texture,
 	    Material material, float systemRadius, int particlesPerSpawn,
 	    float particleRadius, float fadeUnit, float scalar, float angle) {
-
-	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
-
-	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
-
-	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
-
-	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
-
-	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	gl.glBlendEquation(GL_FUNC_ADD);
-	gl.glEnable(GL_BLEND);
-
+	setBlending();
 	if (system instanceof CylindricalSystem == false) {
 	    system = new CylindricalSystem(gl, positions, texture, material,
 		    systemRadius);
@@ -99,34 +68,13 @@ public class PEL {
 	    system.setScalar(scalar);
 	}
 	system.draw(angle);
-
-	gl.glBlendFunc(previousSourceFactor.get(0),
-		previousDestinationFactor.get(0));
-	gl.glBlendEquation(previousEquation.get(0));
-	if (blendWasEnabled == false) {
-	    gl.glDisable(GL_BLEND);
-	}
+	unsetBlending();
     }
 
     public void pelDrawReversedSystem(Vertex[] positions, Texture texture,
 	    Material material, float systemRadius, int particlesPerSpawn,
 	    float particleRadius, float fadeUnit, float scalar, float angle) {
-
-	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
-
-	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
-
-	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
-
-	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
-
-	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	gl.glBlendEquation(GL_FUNC_ADD);
-	gl.glEnable(GL_BLEND);
-
+	setBlending();
 	if (system instanceof ReversedSystem == false) {
 	    system = new ReversedSystem(gl, positions, texture, material,
 		    systemRadius);
@@ -136,35 +84,14 @@ public class PEL {
 	    system.setScalar(scalar);
 	}
 	system.draw(angle);
-
-	gl.glBlendFunc(previousSourceFactor.get(0),
-		previousDestinationFactor.get(0));
-	gl.glBlendEquation(previousEquation.get(0));
-	if (blendWasEnabled == false) {
-	    gl.glDisable(GL_BLEND);
-	}
+	unsetBlending();
     }
 
     public void pelDrawFountainSystem(Vertex[] positions, Texture texture,
 	    Material material, float systemRadius, int particlesPerSpawn,
 	    float particleRadius, float fadeUnit, float scalar, float angle,
 	    Vertex gravity) {
-
-	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
-
-	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
-
-	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
-
-	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
-
-	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	gl.glBlendEquation(GL_FUNC_ADD);
-	gl.glEnable(GL_BLEND);
-
+	setBlending();
 	if (system instanceof FountainSystem == false) {
 	    system = new FountainSystem(gl, positions, texture, material,
 		    systemRadius);
@@ -175,34 +102,14 @@ public class PEL {
 	    system.setGravityVector(gravity);
 	}
 	system.draw(angle);
-
-	gl.glBlendFunc(previousSourceFactor.get(0),
-		previousDestinationFactor.get(0));
-	gl.glBlendEquation(previousEquation.get(0));
-	if (blendWasEnabled == false) {
-	    gl.glDisable(GL_BLEND);
-	}
+	unsetBlending();
     }
 
     public void pelDrawLineSystem(Vertex[] positions, Texture texture,
 	    Material material, float systemRadius, int particlesPerSpawn,
 	    float particleRadius, float fadeUnit, float scalar, float angle,
 	    Vertex gravity) {
-	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
-
-	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
-
-	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
-
-	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
-
-	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	gl.glBlendEquation(GL_FUNC_ADD);
-	gl.glEnable(GL_BLEND);
-
+	setBlending();
 	if (system instanceof LineSystem == false) {
 	    system = new LineSystem(gl, positions, texture, material,
 		    systemRadius);
@@ -213,34 +120,14 @@ public class PEL {
 	    system.setGravityVector(gravity);
 	}
 	system.draw(angle);
-
-	gl.glBlendFunc(previousSourceFactor.get(0),
-		previousDestinationFactor.get(0));
-	gl.glBlendEquation(previousEquation.get(0));
-	if (blendWasEnabled == false) {
-	    gl.glDisable(GL_BLEND);
-	}
+	unsetBlending();
     }
 
     public void pelDrawCircleSystem(Vertex[] positions, Texture texture,
 	    Material material, float systemRadius, int particlesPerSpawn,
 	    float particleRadius, float fadeUnit, float scalar, float angle,
 	    Vertex gravity) {
-	IntBuffer previousEquation = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
-
-	IntBuffer previousSourceFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
-
-	IntBuffer previousDestinationFactor = Buffers.newDirectIntBuffer(1);
-	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
-
-	boolean blendWasEnabled = gl.glIsEnabled(GL_BLEND);
-
-	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	gl.glBlendEquation(GL_FUNC_ADD);
-	gl.glEnable(GL_BLEND);
-
+	setBlending();
 	if (system instanceof CircleSystem == false) {
 	    system = new CircleSystem(gl, positions, texture, material,
 		    systemRadius);
@@ -251,7 +138,27 @@ public class PEL {
 	    system.setGravityVector(gravity);
 	}
 	system.draw(angle);
+	unsetBlending();
+    }
 
+    private void setBlending() {
+	previousEquation = Buffers.newDirectIntBuffer(1);
+	gl.glGetIntegerv(GL_BLEND_EQUATION, previousEquation);
+
+	previousSourceFactor = Buffers.newDirectIntBuffer(1);
+	gl.glGetIntegerv(GL_BLEND_SRC, previousSourceFactor);
+
+	previousDestinationFactor = Buffers.newDirectIntBuffer(1);
+	gl.glGetIntegerv(GL_BLEND_DST, previousDestinationFactor);
+
+	blendWasEnabled = gl.glIsEnabled(GL_BLEND);
+
+	gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	gl.glBlendEquation(GL_FUNC_ADD);
+	gl.glEnable(GL_BLEND);
+    }
+
+    private void unsetBlending() {
 	gl.glBlendFunc(previousSourceFactor.get(0),
 		previousDestinationFactor.get(0));
 	gl.glBlendEquation(previousEquation.get(0));
