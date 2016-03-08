@@ -9,11 +9,14 @@ import static javax.media.opengl.GL.GL_ONE;
 import static javax.media.opengl.GL.GL_SRC_ALPHA;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL2;
 
 import ro.uvt.api.systems.CircleSystem;
 import ro.uvt.api.systems.CylindricalSystem;
+import ro.uvt.api.systems.FireworksSystem;
 import ro.uvt.api.systems.FountainSystem;
 import ro.uvt.api.systems.LineSystem;
 import ro.uvt.api.systems.ParticleSystem;
@@ -35,6 +38,8 @@ public class PEL {
     private IntBuffer previousSourceFactor;
     private IntBuffer previousDestinationFactor;
     private boolean blendWasEnabled;
+
+    private List<ParticleSystem> systems = new ArrayList<>();
 
     public PEL(GL2 gl) {
 	this.gl = gl;
@@ -158,6 +163,59 @@ public class PEL {
 	    system.setPulsate(true);
 	}
 	system.draw(angle);
+	unsetBlending();
+    }
+
+    public void pelDrawFireworksSystem(Vertex[] positions, Texture texture,
+	    Material material, float systemRadius, int particlesPerSpawn,
+	    float particleRadius, float fadeUnit, float scalar, float angle,
+	    Vertex gravity) {
+	setBlending();
+
+	if (system instanceof FireworksSystem == false) {
+	    systems.clear();
+
+	    ParticleSystem aSystem = new FireworksSystem(gl, positions,
+		    texture, material, systemRadius);
+	    aSystem.setParticlesPerSpawn(particlesPerSpawn);
+	    aSystem.setParticleRadius(particleRadius);
+	    aSystem.setFadeUnit(fadeUnit);
+	    aSystem.setScalar(scalar);
+	    aSystem.setGravityVector(gravity);
+	    aSystem.setPulsate(true);
+	    systems.add(aSystem);
+
+	    Vertex[] newPos = new Vertex[2];
+	    newPos[0] = new Vertex(2.0f, 3.0f, 0.0f);
+	    newPos[1] = new Vertex(2.0f, 3.0f, 0.0f);
+	    aSystem = new FireworksSystem(gl, newPos, texture, material,
+		    systemRadius);
+	    aSystem.setParticlesPerSpawn(particlesPerSpawn);
+	    aSystem.setParticleRadius(particleRadius);
+	    aSystem.setFadeUnit(fadeUnit);
+	    aSystem.setScalar(scalar);
+	    aSystem.setGravityVector(gravity);
+	    aSystem.setPulsate(true);
+	    systems.add(aSystem);
+
+	    Vertex[] anotherPos = new Vertex[2];
+	    anotherPos[0] = new Vertex(-2.0f, 3.0f, 0.0f);
+	    anotherPos[1] = new Vertex(-2.0f, 3.0f, 0.0f);
+	    aSystem = new FireworksSystem(gl, anotherPos, texture, material,
+		    systemRadius);
+	    aSystem.setParticlesPerSpawn(particlesPerSpawn);
+	    aSystem.setParticleRadius(particleRadius);
+	    aSystem.setFadeUnit(fadeUnit);
+	    aSystem.setScalar(scalar);
+	    aSystem.setGravityVector(gravity);
+	    aSystem.setPulsate(true);
+	    systems.add(aSystem);
+	}
+
+	for (int i = 0; i < systems.size(); ++i) {
+	    system = systems.get(i);
+	    system.draw(angle);
+	}
 	unsetBlending();
     }
 

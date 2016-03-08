@@ -28,38 +28,30 @@ public class Particle {
     private float lifespan;
 
     public Particle(GL2 gl, Vertex position, Vertex speed, float cameraAngle,
-	    Texture texture, float radius, float fade, Material material) {
-	this.particlePosition = position;
-	this.particleRadius = radius;
-
-	this.speed = speed;
-
-	this.material = material;
-
-	fadeUnit = fade;
-
-	lifespan = 1.0f;
-
+	    Texture texture, float radius, float fadeUnit, Material material) {
 	this.gl = gl;
-
+	this.particlePosition = position;
+	this.speed = speed;
+	this.particleRadius = radius;
+	this.material = material;
 	this.texture = texture;
+	this.fadeUnit = fadeUnit;
+	lifespan = 1.0f;
     }
 
     public void move() {
 	speed.add(gravityVector);
 	particlePosition.add(speed);
 	lifespan -= fadeUnit;
+	material.decreaseAlpha(fadeUnit);
+
 	// I don't want particles to grow right now
 	// particleRadius += 0.001f;
     }
 
     public void draw(float cameraAngle) {
 	computeCornerCoordinates(particlePosition, particleRadius, cameraAngle);
-
-	material.decreaseAlpha(fadeUnit);
-
 	material.bind(gl);
-
 	drawCorners();
     }
 
