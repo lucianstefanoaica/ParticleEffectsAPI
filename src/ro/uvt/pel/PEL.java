@@ -11,6 +11,7 @@ import static javax.media.opengl.GL.GL_SRC_ALPHA;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.media.opengl.GL2;
 
@@ -175,41 +176,29 @@ public class PEL {
 	if (system instanceof FireworksSystem == false) {
 	    systems.clear();
 
-	    ParticleSystem aSystem = new FireworksSystem(gl, positions,
-		    texture, material, systemRadius);
-	    aSystem.setParticlesPerSpawn(particlesPerSpawn);
-	    aSystem.setParticleRadius(particleRadius);
-	    aSystem.setFadeUnit(fadeUnit);
-	    aSystem.setScalar(scalar);
-	    aSystem.setGravityVector(gravity);
-	    aSystem.setPulsate(true);
-	    systems.add(aSystem);
+	    for (int i = 0; i < 5; ++i) {
+		Vertex[] newPos = new Vertex[2];
+		Random rand = new Random();
+		newPos[0] = new Vertex(positions[0].getPositionX()
+			+ rand.nextInt(5), positions[0].getPositionY()
+			+ rand.nextInt(5), positions[0].getPositionZ()
+			+ rand.nextInt(5));
 
-	    Vertex[] newPos = new Vertex[2];
-	    newPos[0] = new Vertex(2.0f, 3.0f, 0.0f);
-	    newPos[1] = new Vertex(2.0f, 3.0f, 0.0f);
-	    aSystem = new FireworksSystem(gl, newPos, texture, material,
-		    systemRadius);
-	    aSystem.setParticlesPerSpawn(particlesPerSpawn);
-	    aSystem.setParticleRadius(particleRadius);
-	    aSystem.setFadeUnit(fadeUnit);
-	    aSystem.setScalar(scalar);
-	    aSystem.setGravityVector(gravity);
-	    aSystem.setPulsate(true);
-	    systems.add(aSystem);
+		newPos[1] = new Vertex(positions[1].getPositionX()
+			+ rand.nextInt(5), positions[1].getPositionY()
+			+ rand.nextInt(5), positions[1].getPositionZ()
+			+ rand.nextInt(5));
 
-	    Vertex[] anotherPos = new Vertex[2];
-	    anotherPos[0] = new Vertex(-2.0f, 3.0f, 0.0f);
-	    anotherPos[1] = new Vertex(-2.0f, 3.0f, 0.0f);
-	    aSystem = new FireworksSystem(gl, anotherPos, texture, material,
-		    systemRadius);
-	    aSystem.setParticlesPerSpawn(particlesPerSpawn);
-	    aSystem.setParticleRadius(particleRadius);
-	    aSystem.setFadeUnit(fadeUnit);
-	    aSystem.setScalar(scalar);
-	    aSystem.setGravityVector(gravity);
-	    aSystem.setPulsate(true);
-	    systems.add(aSystem);
+		ParticleSystem aSystem = new FireworksSystem(gl, newPos,
+			texture, material.randomize(), systemRadius);
+		aSystem.setParticlesPerSpawn(particlesPerSpawn);
+		aSystem.setParticleRadius(particleRadius);
+		aSystem.setFadeUnit(fadeUnit);
+		aSystem.setScalar(scalar);
+		aSystem.setGravityVector(gravity);
+		aSystem.setPulsate(true);
+		systems.add(aSystem);
+	    }
 	}
 
 	for (int i = 0; i < systems.size(); ++i) {
