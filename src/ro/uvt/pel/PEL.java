@@ -15,6 +15,7 @@ import java.util.Random;
 
 import javax.media.opengl.GL2;
 
+import ro.uvt.api.systems.AtomicSystem;
 import ro.uvt.api.systems.CircleSystem;
 import ro.uvt.api.systems.CylindricalSystem;
 import ro.uvt.api.systems.FireworksSystem;
@@ -201,6 +202,35 @@ public class PEL {
 	    }
 	}
 
+	for (int i = 0; i < systems.size(); ++i) {
+	    system = systems.get(i);
+	    system.draw(angle);
+	}
+	unsetBlending();
+    }
+
+    public void pelDrawAtomicSystem(Vertex[] positions, Texture texture,
+	    Material material, float systemRadius, int particlesPerSpawn,
+	    float particleRadius, float fadeUnit, float scalar, float angle,
+	    Vertex gravity) {
+	setBlending();
+	if (system instanceof AtomicSystem == false) {
+	    systems.clear();
+
+	    for (int i = 0; i < 4; ++i) {
+		AtomicSystem aSystem = new AtomicSystem(gl, positions, texture,
+			material, systemRadius);
+		aSystem.setParticlesPerSpawn(particlesPerSpawn);
+		aSystem.setParticleRadius(particleRadius);
+		aSystem.setFadeUnit(fadeUnit);
+		aSystem.setScalar(scalar);
+		aSystem.setGravityVector(gravity);
+		aSystem.setPulsate(true);
+		aSystem.setType(i);
+
+		systems.add(aSystem);
+	    }
+	}
 	for (int i = 0; i < systems.size(); ++i) {
 	    system = systems.get(i);
 	    system.draw(angle);
