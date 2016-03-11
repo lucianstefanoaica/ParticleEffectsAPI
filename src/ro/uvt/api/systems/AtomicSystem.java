@@ -29,7 +29,6 @@ public class AtomicSystem extends ParticleSystem {
     }
 
     private Vertex generatePointOnCircle() {
-	System.out.println(type);
 	float angle = rand.nextFloat() * 2 * (float) Math.PI;
 	Vertex pointOnCircle = null;
 
