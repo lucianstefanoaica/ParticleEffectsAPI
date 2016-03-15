@@ -6,7 +6,7 @@ import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
 public interface PEL {
-  
+
   public void pelCone(Vertex[] positions, Texture texture, Material material, float systemRadius,
       int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar, float angle);
 
@@ -39,6 +39,10 @@ public interface PEL {
       float angle, Vertex gravity);
 
   public void pelAtom(Vertex[] positions, Texture texture, Material material, float systemRadius,
+      int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar, float angle,
+      Vertex gravity);
+
+  public void pelDisk(Vertex[] positions, Texture texture, Material material, float systemRadius,
       int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar, float angle,
       Vertex gravity);
 }

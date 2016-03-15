@@ -7,6 +7,7 @@ import javax.media.opengl.GL2;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
+import ro.uvt.pel.util.Particle;
 import ro.uvt.pel.util.Vertex;
 
 import com.jogamp.opengl.util.texture.Texture;

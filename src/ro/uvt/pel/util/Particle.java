@@ -1,4 +1,4 @@
-package ro.uvt.pel.particle_systems;
+package ro.uvt.pel.util;
 
 import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 

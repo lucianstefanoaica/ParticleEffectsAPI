@@ -20,6 +20,7 @@ import ro.uvt.pel.particle_systems.Atom;
 import ro.uvt.pel.particle_systems.Fire;
 import ro.uvt.pel.particle_systems.Cone;
 import ro.uvt.pel.particle_systems.Cylinder;
+import ro.uvt.pel.particle_systems.Disk;
 import ro.uvt.pel.particle_systems.Fireworks;
 import ro.uvt.pel.particle_systems.Fountain;
 import ro.uvt.pel.particle_systems.Line;
@@ -59,7 +60,8 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof Cone == false) {
       system = new Cone(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, new Vertex(),
+          false);
     }
     system.draw(angle);
     unsetBlending();
@@ -71,7 +73,8 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof Cylinder == false) {
       system = new Cylinder(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, new Vertex(),
+          false);
     }
     system.draw(angle);
     unsetBlending();
@@ -83,7 +86,8 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof ReversedCone == false) {
       system = new ReversedCone(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, new Vertex(),
+          false);
     }
     system.draw(angle);
     unsetBlending();
@@ -95,8 +99,7 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof Fountain == false) {
       system = new Fountain(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
-      system.setGravityVector(gravity);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity, false);
     }
     system.draw(angle);
     unsetBlending();
@@ -108,8 +111,7 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof Line == false) {
       system = new Line(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
-      system.setGravityVector(gravity);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity, false);
     }
     system.draw(angle);
     unsetBlending();
@@ -121,8 +123,7 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof Fire == false) {
       system = new Fire(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
-      system.setGravityVector(gravity);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity, false);
     }
     system.draw(angle);
     unsetBlending();
@@ -134,9 +135,7 @@ public class DefaultPEL implements PEL {
     setBlending();
     if (system instanceof Ring == false) {
       system = new Ring(gl, positions, texture, material, systemRadius);
-      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar);
-      system.setGravityVector(gravity);
-      system.setPulsate(true);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity, true);
     }
     system.draw(angle);
     unsetBlending();
@@ -162,9 +161,8 @@ public class DefaultPEL implements PEL {
 
         ParticleSystem aSystem =
             new Fireworks(gl, newPos, texture, material.randomize(), systemRadius);
-        injectAttributes(aSystem, particlesPerSpawn, particleRadius, fadeUnit, scalar);
-        aSystem.setGravityVector(gravity);
-        aSystem.setPulsate(true);
+        injectAttributes(aSystem, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity,
+            true);
         systems.add(aSystem);
       }
     }
@@ -185,9 +183,8 @@ public class DefaultPEL implements PEL {
 
       for (int i = 0; i < 3; ++i) {
         Atom aSystem = new Atom(gl, positions, texture, material, systemRadius);
-        injectAttributes(aSystem, particlesPerSpawn, particleRadius, fadeUnit, scalar);
-        aSystem.setGravityVector(gravity);
-        aSystem.setPulsate(true);
+        injectAttributes(aSystem, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity,
+            true);
         aSystem.setType(i);
 
         systems.add(aSystem);
@@ -199,13 +196,27 @@ public class DefaultPEL implements PEL {
     }
     unsetBlending();
   }
+  
+  public void pelDisk(Vertex[] positions, Texture texture, Material material, float systemRadius,
+      int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar, float angle,
+      Vertex gravity) {
+    setBlending();
+    if (system instanceof Disk == false) {
+      system = new Disk(gl, positions, texture, material, systemRadius);
+      injectAttributes(system, particlesPerSpawn, particleRadius, fadeUnit, scalar, gravity, false);
+    }
+    system.draw(angle);
+    unsetBlending();
+  }
 
   private void injectAttributes(ParticleSystem system, int particlesPerSpawn, float particleRadius,
-      float fadeUnit, float scalar) {
+      float fadeUnit, float scalar, Vertex gravity, boolean pulse) {
     system.setParticlesPerSpawn(particlesPerSpawn);
     system.setParticleRadius(particleRadius);
     system.setFadeUnit(fadeUnit);
     system.setScalar(scalar);
+    system.setGravityVector(gravity);
+    system.setPulsate(pulse);
   }
 
   private void setBlending() {
