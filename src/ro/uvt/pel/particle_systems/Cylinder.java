@@ -1,28 +1,45 @@
 
 package ro.uvt.pel.particle_systems;
 
-import javax.media.opengl.GL2;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Cylinder extends ParticleSystem {
 
-public class Cylinder extends ParticleSystem {
+  private Vertex source;
+  private Vertex destination;
+  private float radius;
 
-  public Cylinder(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
-    super(gl, positions, texture, material, systemRadius);
-    aBackupPosition = new Vertex(source.getPositionX(), source.getPositionY(), source.getPositionZ());
+  Cylinder(Vertex source, Vertex destination, float radius, Texture texture, Material material,
+      float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.radius = radius;
+    this.source = source;
+    this.destination = destination;
   }
 
-  protected void generateParticleDirectionVector() {
-    Vertex pointInFirstSphere = generatePointInSphere(source, aBackupPosition, systemRadius);
-    Vertex pointInSecondSphere = Calculator.add(destination, Calculator.subtract(pointInFirstSphere, source));
+  List<Vertex> generateSpeedVectors(List<Vertex> sources, float speedScalar) {
+    List<Vertex> list = new ArrayList<>();
+    for (Vertex vertex : sources) {
+      Vertex difference = Calculator.subtract(vertex, source);
+      Vertex pointInSecondSphere = Calculator.add(destination, difference);
+      Vertex speed = Calculator.subtract(pointInSecondSphere, vertex);
+      list.add(Calculator.scaleDown(speed, speedScalar));
+    }
+    return list;
+  }
 
-    Vertex differenceVector = Calculator.subtract(pointInSecondSphere, pointInFirstSphere);
-
-    startPosition = pointInFirstSphere;
-    speed = Calculator.scaleDown(differenceVector, scalar);
+  List<Vertex> generatePositionVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(Calculator.generateVertexInSphere(source, radius));
+    }
+    return list;
   }
 }

@@ -1,27 +1,43 @@
 package ro.uvt.pel.particle_systems;
 
-import javax.media.opengl.GL2;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Cone extends ParticleSystem {
 
-public class Cone extends ParticleSystem {
+  private Vertex source;
+  private Vertex destination;
+  private float radius;
 
-  public Cone(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
-    super(gl, positions, texture, material, systemRadius);
-    aBackupPosition =
-        new Vertex(destination.getPositionX(), destination.getPositionY(),
-            destination.getPositionZ());
+  Cone(Vertex source, Vertex destination, float radius, Texture texture, Material material,
+      float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.source = source;
+    this.destination = destination;
+    this.radius = radius;
   }
 
-  protected void generateParticleDirectionVector() {
-    Vertex pointInSphere = generatePointInSphere(destination, aBackupPosition, systemRadius);
-    Vertex movementVector = Calculator.subtract(pointInSphere, source);
+  List<Vertex> generateSpeedVectors(float speedScalar, int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      Vertex pointInSphere = Calculator.generateVertexInSphere(destination, radius);
+      Vertex movementVector = Calculator.subtract(pointInSphere, source);
+      list.add(Calculator.scaleDown(movementVector, speedScalar));
+    }
+    return list;
+  }
 
-    speed = Calculator.scaleDown(movementVector, scalar);
-    startPosition = source.clone();
+  List<Vertex> generatePositionVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(source);
+    }
+    return list;
   }
 }

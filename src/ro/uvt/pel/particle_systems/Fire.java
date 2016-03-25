@@ -1,38 +1,38 @@
 package ro.uvt.pel.particle_systems;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.media.opengl.GL2;
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Fire extends ParticleSystem {
 
-public class Fire extends ParticleSystem {
+  private Vertex center;
+  private float radius;
 
-  private Random rand;
-
-  public Fire(GL2 gl, Vertex[] positions, Texture texture, Material material,
-      float systemRadius) {
-    super(gl, positions, texture, material, systemRadius);
-    rand = new Random();
+  Fire(Vertex center, float radius, Texture texture, Material material, float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.center = center;
+    this.radius = radius;
   }
 
-  @Override
-  protected void generateParticleDirectionVector() {
-    startPosition = generatePointInCircle(source, systemRadius);
-    speed = new Vertex(0.0f, 0.0f, 0.0f);
+  List<Vertex> generateSpeedVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(new Vertex());
+    }
+    return list;
   }
 
-  private Vertex generatePointInCircle(Vertex center, float radius) {
-    float angle = rand.nextFloat() * 2 * (float) Math.PI;
-
-    Vertex pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f, (float) Math.sin(angle));
-
-    Vertex scaledPoint = Calculator.scaleUp(pointOnCircle, radius);
-
-    return Calculator.scaleUp(scaledPoint, rand.nextFloat()).add(center);
+  List<Vertex> generatePositionVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(Calculator.generateVertexInCircle(center, radius));
+    }
+    return list;
   }
 }

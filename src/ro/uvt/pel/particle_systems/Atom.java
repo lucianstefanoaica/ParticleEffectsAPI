@@ -1,62 +1,40 @@
 package ro.uvt.pel.particle_systems;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.media.opengl.GL2;
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Atom extends ParticleSystem {
 
-public class Atom extends ParticleSystem {
+  private Vertex center;
 
-    private Random rand;
+  Atom(Vertex center, Texture texture, Material material, float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.center = center;
+  }
 
-    private int type;
-
-    public Atom(GL2 gl, Vertex[] positions, Texture texture,
-	    Material material, float systemRadius) {
-	super(gl, positions, texture, material, systemRadius);
-	rand = new Random();
+  List<Vertex> generateSpeedVectors(float speedScalar, int count) {
+    List<Vertex> list = new ArrayList<>();
+    int segment = count * 3;
+    for (int type = 0; type <= 2; ++type) {
+      for (int i = 0; i < segment / 3; ++i) {
+        list.add(Calculator.generateVertexOnCircle(type, speedScalar));
+      }
     }
 
-    @Override
-    protected void generateParticleDirectionVector() {
-	startPosition = source.clone();
-	speed = generatePointOnCircle();
+    return list;
+  }
+
+  List<Vertex> generatePositionVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 0; i < count * 3; ++i) {
+      list.add(center);
     }
-
-    private Vertex generatePointOnCircle() {
-	float angle = rand.nextFloat() * 2 * (float) Math.PI;
-	Vertex pointOnCircle = null;
-
-	switch (type) {
-	case 0:
-	    pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f,
-		    (float) Math.sin(angle));
-	    break;
-
-	case 1:
-	    pointOnCircle = new Vertex((float) Math.cos(angle),
-		    (float) Math.cos(angle), (float) Math.sin(angle));
-	    break;
-
-	case 2:
-	    pointOnCircle = new Vertex((float) Math.cos(angle),
-		    -(float) Math.cos(angle), (float) Math.sin(angle));
-	    break;
-	}
-
-	return Calculator.scaleDown(pointOnCircle, systemRadius);
-    }
-
-    public int getType() {
-	return type;
-    }
-
-    public void setType(int type) {
-	this.type = type;
-    }
+    return list;
+  }
 }

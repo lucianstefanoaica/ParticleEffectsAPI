@@ -1,33 +1,38 @@
 package ro.uvt.pel.particle_systems;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.media.opengl.GL2;
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Line extends ParticleSystem {
 
-public class Line extends ParticleSystem {
+  private Vertex left;
+  private Vertex right;
 
-  private Random rand;
-
-  public Line(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
-    super(gl, positions, texture, material, systemRadius);
-    rand = new Random();
+  Line(Vertex left, Vertex right, Texture texture, Material material, float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.left = left;
+    this.right = right;
   }
 
-  @Override
-  protected void generateParticleDirectionVector() {
-    startPosition = generateRandomPointOnLine(source, destination, 200);
-    speed = new Vertex(0.0f, 0.0f, 0.0f);
+  List<Vertex> generateSpeedVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(new Vertex());
+    }
+    return list;
   }
 
-  private Vertex generateRandomPointOnLine(Vertex left, Vertex right, int scalar) {
-    Vertex differenceVector = Calculator.subtract(right, left);
-    Vertex stepVector = Calculator.scaleDown(differenceVector, scalar);
-    return Calculator.add(source, Calculator.scaleUp(stepVector, rand.nextFloat() * scalar));
+  List<Vertex> generatePositionVectors(int count, int lineScalar) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 0; i < count; ++i) {
+      list.add(Calculator.generateVertexOnLine(left, right, lineScalar));
+    }
+    return list;
   }
 }

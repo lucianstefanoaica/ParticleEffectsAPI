@@ -1,29 +1,40 @@
 package ro.uvt.pel.particle_systems;
 
-import javax.media.opengl.GL2;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Fireworks extends ParticleSystem {
 
-public class Fireworks extends ParticleSystem {
+  private List<Vertex> sources;
 
-    public Fireworks(GL2 gl, Vertex[] positions, Texture texture,
-	    Material material, float systemRadius) {
-	super(gl, positions, texture, material, systemRadius);
-	aBackupPosition = new Vertex(source.getPositionX(),
-		source.getPositionY(), source.getPositionZ());
+  Fireworks(List<Vertex> sources, Texture texture, Material material, float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.sources = sources;
+  }
+
+  List<Vertex> generateSpeedVectors(float speedScalar, List<Vertex> vertices) {
+    List<Vertex> list = new ArrayList<>();
+    for (Vertex vertex : vertices) {
+      Vertex vertexInSphere = Calculator.generateVertexInSphere(vertex, speedScalar);
+      Vertex difference = Calculator.subtract(vertexInSphere, vertex);
+      list.add(Calculator.scaleDown(difference, speedScalar));
     }
+    return list;
+  }
 
-    @Override
-    protected void generateParticleDirectionVector() {
-	Vertex pointInSphere = generatePointInSphere(destination,
-		aBackupPosition, systemRadius);
-	Vertex movementVector = Calculator.subtract(pointInSphere, source);
-
-	speed = Calculator.scaleDown(movementVector, scalar);
-	startPosition = source.clone();
+  List<Vertex> generatePositionVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (Vertex source : sources) {
+      for (int i = 0; i < count; ++i) {
+        list.add(source);
+      }
     }
+    return list;
+  }
 }

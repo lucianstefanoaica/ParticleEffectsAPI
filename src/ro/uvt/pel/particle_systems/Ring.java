@@ -1,35 +1,36 @@
 package ro.uvt.pel.particle_systems;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.media.opengl.GL2;
+import com.jogamp.opengl.util.texture.Texture;
 
 import ro.uvt.pel.util.Calculator;
 import ro.uvt.pel.util.Material;
 import ro.uvt.pel.util.Vertex;
 
-import com.jogamp.opengl.util.texture.Texture;
+class Ring extends ParticleSystem {
 
-public class Ring extends ParticleSystem {
+  private Vertex center;
 
-  private Random rand;
-
-  public Ring(GL2 gl, Vertex[] positions, Texture texture, Material material, float systemRadius) {
-    super(gl, positions, texture, material, systemRadius);
-    rand = new Random();
+  Ring(Vertex center, Texture texture, Material material, float fadeQuotient) {
+    super(texture, material, fadeQuotient);
+    this.center = center;
   }
 
-  @Override
-  protected void generateParticleDirectionVector() {
-    startPosition = source.clone();
-    speed = generatePointOnCircle();
+  List<Vertex> generateSpeedVectors(float speedScalar, int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(Calculator.generateVertexOnCircle(0, speedScalar));
+    }
+    return list;
   }
 
-  private Vertex generatePointOnCircle() {
-    float angle = rand.nextFloat() * 2 * (float) Math.PI;
-
-    Vertex pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f, (float) Math.sin(angle));
-
-    return Calculator.scaleDown(pointOnCircle, systemRadius);
+  List<Vertex> generatePositionVectors(int count) {
+    List<Vertex> list = new ArrayList<>();
+    for (int i = 1; i <= count; ++i) {
+      list.add(center);
+    }
+    return list;
   }
 }

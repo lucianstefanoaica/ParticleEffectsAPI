@@ -5,6 +5,8 @@ import java.util.Random;
 
 public class Calculator {
 
+  private Calculator() {}
+
   public static Vertex add(Vertex first, Vertex second) {
     float a = first.getPositionX() + second.getPositionX();
     float b = first.getPositionY() + second.getPositionY();
@@ -70,6 +72,14 @@ public class Calculator {
     return new Vertex(a, b, c);
   }
 
+  public static Vertex scaleDown(Vertex what, float scalar) {
+    float xVal = what.getPositionX() / scalar;
+    float yVal = what.getPositionY() / scalar;
+    float zVal = what.getPositionZ() / scalar;
+
+    return new Vertex(xVal, yVal, zVal);
+  }
+
   public static double computeDistance(Vertex first, Vertex second) {
 
     double x1 = first.getPositionX();
@@ -89,7 +99,7 @@ public class Calculator {
 
   /**
    * @param planePointVector a vector from a point P which is on the plane to a point Q which is not
-   * on the plane I AM NOT SHURE I NEED THIS FUNCTION ANYMORE...
+   *        on the plane I AM NOT SHURE I NEED THIS FUNCTION ANYMORE...
    * @param planeNormal a vector which represents the normal of the plane
    * @return the distance from the plane to the point Q
    */
@@ -112,7 +122,7 @@ public class Calculator {
     return denominator / divisor;
   }
 
-  public static float getRandomNumberInRange(float min, float max) {
+  public static float generateNumberInRange(float min, float max) {
     float range = max - min;
 
     Random gen = new Random();
@@ -122,11 +132,65 @@ public class Calculator {
     return scaledNumber + min;
   }
 
-  public static Vertex scaleDown(Vertex what, float scalar) {
-    float xVal = what.getPositionX() / scalar;
-    float yVal = what.getPositionY() / scalar;
-    float zVal = what.getPositionZ() / scalar;
+  // public static Vertex generateVertexInSphere(Vertex center, float radius) {
+  // float cubeHeight = 0.1f;
+  // float x = center.getPositionX() + getRandomNumberInRange(-cubeHeight, cubeHeight);
+  // float y = center.getPositionY() + getRandomNumberInRange(-cubeHeight, cubeHeight);
+  // float z = center.getPositionZ() + getRandomNumberInRange(-cubeHeight, cubeHeight);
+  //
+  // Vertex aVertex = new Vertex(x, y, z);
+  //
+  // return scaleUp(aVertex, radius);
+  // }
 
-    return new Vertex(xVal, yVal, zVal);
+  public static Vertex generateVertexOnCircle(int type, float radius) {
+    float angle = new Random().nextFloat() * 2 * (float) Math.PI;
+    Vertex pointOnCircle = null;
+    switch (type) {
+      case 0:
+        pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f, (float) Math.sin(angle));
+        break;
+
+      case 1:
+        pointOnCircle =
+            new Vertex((float) Math.cos(angle), (float) Math.cos(angle), (float) Math.sin(angle));
+        break;
+
+      case 2:
+        pointOnCircle =
+            new Vertex((float) Math.cos(angle), -(float) Math.cos(angle), (float) Math.sin(angle));
+        break;
+    }
+    return scaleDown(pointOnCircle, radius);
+  }
+
+  public static Vertex generateVertexInCircle(Vertex center, float radius) {
+    Random rand = new Random();
+    float angle = rand.nextFloat() * 2 * (float) Math.PI;
+    Vertex pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f, (float) Math.sin(angle));
+    Vertex scaledPoint = scaleUp(pointOnCircle, radius);
+    return add(scaleUp(scaledPoint, rand.nextFloat()), center);
+  }
+
+  public static Vertex generateVertexOnLine(Vertex left, Vertex right, int lineScalar) {
+    Vertex differenceVector = subtract(right, left);
+    Vertex stepVector = scaleDown(differenceVector, lineScalar);
+    return add(left, scaleUp(stepVector, new Random().nextFloat() * lineScalar));
+  }
+
+  public static Vertex generateVertexInSphere(Vertex center, float radius) {
+    Vertex point = null;
+    while (true) {
+      float x = generateNumberInRange(-radius, radius);
+      float y = generateNumberInRange(-radius, radius);
+      float z = generateNumberInRange(-radius, radius);
+
+      point = add(center, new Vertex(x, y, z));
+
+      if (computeDistance(center, point) <= radius) {
+        break;
+      }
+    }
+    return point;
   }
 }
