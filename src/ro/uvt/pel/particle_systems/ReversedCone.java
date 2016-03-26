@@ -27,7 +27,7 @@ class ReversedCone extends ParticleSystem {
     List<Vertex> list = new ArrayList<>();
     for (Vertex vertex : sources) {
       Vertex difference = Calculator.subtract(destination, vertex);
-      list.add(Calculator.scaleDown(difference, speedScalar));
+      list.add(Calculator.scaleUp(difference, speedScalar));
     }
     return list;
   }

@@ -24,7 +24,6 @@ public class Calculator {
   }
 
   public static Vertex normalize(Vertex vector) {
-
     float x = vector.getPositionX();
     float y = vector.getPositionY();
     float z = vector.getPositionZ();
@@ -81,7 +80,6 @@ public class Calculator {
   }
 
   public static double computeDistance(Vertex first, Vertex second) {
-
     double x1 = first.getPositionX();
     double y1 = first.getPositionY();
     double z1 = first.getPositionZ();
@@ -132,17 +130,6 @@ public class Calculator {
     return scaledNumber + min;
   }
 
-  // public static Vertex generateVertexInSphere(Vertex center, float radius) {
-  // float cubeHeight = 0.1f;
-  // float x = center.getPositionX() + getRandomNumberInRange(-cubeHeight, cubeHeight);
-  // float y = center.getPositionY() + getRandomNumberInRange(-cubeHeight, cubeHeight);
-  // float z = center.getPositionZ() + getRandomNumberInRange(-cubeHeight, cubeHeight);
-  //
-  // Vertex aVertex = new Vertex(x, y, z);
-  //
-  // return scaleUp(aVertex, radius);
-  // }
-
   public static Vertex generateVertexOnCircle(int type, float radius) {
     float angle = new Random().nextFloat() * 2 * (float) Math.PI;
     Vertex pointOnCircle = null;
@@ -161,7 +148,7 @@ public class Calculator {
             new Vertex((float) Math.cos(angle), -(float) Math.cos(angle), (float) Math.sin(angle));
         break;
     }
-    return scaleDown(pointOnCircle, radius);
+    return scaleUp(pointOnCircle, radius);
   }
 
   public static Vertex generateVertexInCircle(Vertex center, float radius) {
@@ -172,10 +159,9 @@ public class Calculator {
     return add(scaleUp(scaledPoint, rand.nextFloat()), center);
   }
 
-  public static Vertex generateVertexOnLine(Vertex left, Vertex right, int lineScalar) {
+  public static Vertex generateVertexOnLine(Vertex left, Vertex right) {
     Vertex differenceVector = subtract(right, left);
-    Vertex stepVector = scaleDown(differenceVector, lineScalar);
-    return add(left, scaleUp(stepVector, new Random().nextFloat() * lineScalar));
+    return add(left, scaleUp(differenceVector, new Random().nextFloat()));
   }
 
   public static Vertex generateVertexInSphere(Vertex center, float radius) {

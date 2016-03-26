@@ -28,10 +28,10 @@ class Line extends ParticleSystem {
     return list;
   }
 
-  List<Vertex> generatePositionVectors(int count, int lineScalar) {
+  List<Vertex> generatePositionVectors(int count) {
     List<Vertex> list = new ArrayList<>();
     for (int i = 0; i < count; ++i) {
-      list.add(Calculator.generateVertexOnLine(left, right, lineScalar));
+      list.add(Calculator.generateVertexOnLine(left, right));
     }
     return list;
   }

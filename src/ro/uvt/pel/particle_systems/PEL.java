@@ -12,41 +12,38 @@ import ro.uvt.pel.util.Vertex;
 public interface PEL {
 
   public void pelCone(Vertex source, Vertex destination, Texture texture, Material material,
-      float systemRadius, int particlesPerSpawn, float particleRadius, float fade, float scalar,
-      float angle);
+      int particleCount, float coneRadius, float particleRadius, float fadeQuotient, float speed,
+      float particleAngle);
 
   public void pelCylinder(Vertex source, Vertex destination, Texture texture, Material material,
-      float systemRadius, int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar,
-      float angle);
+      int particleCount, float cylinderRadius, float particleRadius, float fadeQuotient,
+      float speed, float particleAngle);
 
   public void pelReversedCone(Vertex source, Vertex destination, Texture texture, Material material,
-      float systemRadius, int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar,
+      int particleCount, float coneRadius, float particleRadius, float fadeQuotient, float speed,
       float angle);
 
-  public void pelFountain(Vertex source, Vertex destination, Texture texture, Material material,
-      float systemRadius, int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar,
-      float angle, Vertex gravity);
+  public void pelFountain(Vertex source, Vertex destination, Vertex weight, Texture texture,
+      Material material, int particleCount, float fountainRadius, float particleRadius,
+      float fadeQuotient, float speed, float angle);
 
-  public void pelLine(Vertex left, Vertex right, Texture texture, Material material,
-      int particlesPerSpawn, float particleRadius, float fadeUnit, int scalar, float angle,
-      Vertex gravity);
+  public void pelLine(Vertex left, Vertex right, Vertex weight, Texture texture, Material material,
+      int particleCount, float particleRadius, float fadeQuotient, float angle);
 
-  public void pelFire(Vertex center, Texture texture, Material material, float systemRadius,
-      int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar, float angle,
-      Vertex gravity);
+  public void pelFire(Vertex center, Vertex weight, Texture texture, Material material,
+      int particleCount, float fireRadius, float particleRadius, float fadeQuotient, float angle);
 
-  public void pelRing(Vertex center, Texture texture, Material material, int particlesPerSpawn,
-      float particleRadius, float fadeUnit, float scalar, float angle, Vertex gravity);
+  public void pelRing(Vertex center, Texture texture, Material material, int particleCount,
+      float particleRadius, float fadeQuotient, float speed, float angle);
 
-  public void pelFireworks(List<Vertex> sources, Texture texture, Material material,
-      int particlesPerSpawn, float particleRadius, float fadeUnit, float scalar, float angle,
-      Vertex gravity);
+  public void pelFireworks(List<Vertex> sources, Vertex weight, Texture texture, Material material,
+      int particleCount, float particleRadius, float fadeQuotient, float speed, float angle);
 
-  public void pelAtom(Vertex center, Texture texture, Material material, int particlesPerSpawn,
-      float particleRadius, float fadeUnit, float scalar, float angle);
+  public void pelAtom(Vertex center, Texture texture, Material material, int particleCount,
+      float particleRadius, float fadeQuotient, float speed, float angle);
 
-  public void pelDisk(Vertex center, float diskRadius, float particleRadius, Texture texture,
-      Material material, int particlesPerSpawn, float fadeUnit, float scalar, float cameraAngle);
+  public void pelDisk(Vertex center, Texture texture, Material material, int particleCount,
+      float fadeQuotient, float speed, float particleRadius, float cameraAngle);
 
   public void registerGLAutoDrawable(GLAutoDrawable drawable);
 }

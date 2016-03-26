@@ -29,8 +29,8 @@ class Cylinder extends ParticleSystem {
     for (Vertex vertex : sources) {
       Vertex difference = Calculator.subtract(vertex, source);
       Vertex pointInSecondSphere = Calculator.add(destination, difference);
-      Vertex speed = Calculator.subtract(pointInSecondSphere, vertex);
-      list.add(Calculator.scaleDown(speed, speedScalar));
+      Vertex movementVector = Calculator.subtract(pointInSecondSphere, vertex);
+      list.add(Calculator.scaleUp(movementVector, speedScalar));
     }
     return list;
   }

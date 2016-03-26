@@ -18,12 +18,12 @@ class Fireworks extends ParticleSystem {
     this.sources = sources;
   }
 
-  List<Vertex> generateSpeedVectors(float speedScalar, List<Vertex> vertices) {
+  List<Vertex> generateSpeedVectors(List<Vertex> vertices, float speedScalar) {
     List<Vertex> list = new ArrayList<>();
     for (Vertex vertex : vertices) {
-      Vertex vertexInSphere = Calculator.generateVertexInSphere(vertex, speedScalar);
+      Vertex vertexInSphere = Calculator.generateVertexInSphere(vertex, 1.0f);
       Vertex difference = Calculator.subtract(vertexInSphere, vertex);
-      list.add(Calculator.scaleDown(difference, speedScalar));
+      list.add(Calculator.scaleUp(difference, speedScalar));
     }
     return list;
   }
@@ -31,7 +31,7 @@ class Fireworks extends ParticleSystem {
   List<Vertex> generatePositionVectors(int count) {
     List<Vertex> list = new ArrayList<>();
     for (Vertex source : sources) {
-      for (int i = 0; i < count; ++i) {
+      for (int i = 1; i <= count; ++i) {
         list.add(source);
       }
     }

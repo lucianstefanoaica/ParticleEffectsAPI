@@ -28,7 +28,7 @@ class Cone extends ParticleSystem {
     for (int i = 1; i <= count; ++i) {
       Vertex pointInSphere = Calculator.generateVertexInSphere(destination, radius);
       Vertex movementVector = Calculator.subtract(pointInSphere, source);
-      list.add(Calculator.scaleDown(movementVector, speedScalar));
+      list.add(Calculator.scaleUp(movementVector, speedScalar));
     }
     return list;
   }
