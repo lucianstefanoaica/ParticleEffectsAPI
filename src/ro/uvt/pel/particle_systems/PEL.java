@@ -13,11 +13,11 @@ public interface PEL {
 
   public void pelCone(Vertex source, Vertex destination, Texture texture, Material material,
       int particleCount, float coneRadius, float particleRadius, float fadeQuotient, float speed,
-      float particleAngle);
+      float angle);
 
   public void pelCylinder(Vertex source, Vertex destination, Texture texture, Material material,
       int particleCount, float cylinderRadius, float particleRadius, float fadeQuotient,
-      float speed, float particleAngle);
+      float speed, float angle);
 
   public void pelReversedCone(Vertex source, Vertex destination, Texture texture, Material material,
       int particleCount, float coneRadius, float particleRadius, float fadeQuotient, float speed,
@@ -43,7 +43,7 @@ public interface PEL {
       float particleRadius, float fadeQuotient, float speed, float angle);
 
   public void pelDisk(Vertex center, Texture texture, Material material, int particleCount,
-      float fadeQuotient, float speed, float particleRadius, float cameraAngle);
+      float particleRadius, float fadeQuotient, float speed, float angle);
 
   public void registerGLAutoDrawable(GLAutoDrawable drawable);
 }

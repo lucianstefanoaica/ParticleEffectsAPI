@@ -170,7 +170,7 @@ class DefaultPEL implements PEL {
   }
 
   public void pelDisk(Vertex center, Texture texture, Material material, int particleCount,
-      float fadeQuotient, float speed, float particleRadius, float cameraAngle) {
+      float particleRadius, float fadeQuotient, float speed, float angle) {
     Map<String, Object> previousBlendSettings = setBlending();
     if (systems.get("disk") == null) {
       systems.put("disk", new Ring(center, texture, material, fadeQuotient));
@@ -179,7 +179,7 @@ class DefaultPEL implements PEL {
     List<Vertex> speeds = disk.generateSpeedVectors(speed, particleCount);
     List<Vertex> positions = disk.generatePositionVectors(particleCount);
     disk.spawnParticles(particleCount, particleRadius, new Vertex(), speeds, positions);
-    disk.appearOnGLAutoDrawable(drawable, cameraAngle);
+    disk.appearOnGLAutoDrawable(drawable, angle);
     resetBlending(previousBlendSettings);
   }
 
