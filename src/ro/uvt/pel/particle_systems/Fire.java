@@ -35,4 +35,20 @@ class Fire extends ParticleSystem {
     }
     return list;
   }
+
+  Vertex getCenter() {
+    return center;
+  }
+
+  void setCenter(Vertex center) {
+    this.center = center;
+  }
+
+  float getRadius() {
+    return radius;
+  }
+
+  void setRadius(float radius) {
+    this.radius = radius;
+  }
 }

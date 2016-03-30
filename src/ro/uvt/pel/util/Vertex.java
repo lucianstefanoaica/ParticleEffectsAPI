@@ -23,21 +23,52 @@ public class Vertex {
     this.positionZ = positionZ;
   }
 
-  // public Vertex add(Vertex vector) {
-  // positionX += vector.getPositionX();
-  // positionY += vector.getPositionY();
-  // positionZ += vector.getPositionZ();
-  // return this;
-  // }
-
-  // public Vertex clone() {
-  // return new Vertex(positionX, positionY, positionZ);
-  // }
-
   @Override
   public String toString() {
     return "Vertex [positionX=" + positionX + ", positionY=" + positionY + ", positionZ="
         + positionZ + "]";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Vertex theVertex = (Vertex) obj;
+    if (theVertex.getPositionX() != positionX) {
+      return false;
+    }
+
+    if (theVertex.getPositionY() != positionY) {
+      return false;
+    }
+
+    if (theVertex.getPositionZ() != positionZ) {
+      return false;
+    }
+
+    if (theVertex.getNormalX() != normalX) {
+      return false;
+    }
+
+    if (theVertex.getNormalY() != normalY) {
+      return false;
+    }
+
+    if (theVertex.getNormalZ() != normalZ) {
+      return false;
+    }
+
+    if (theVertex.getTextureU() != textureU) {
+      return false;
+    }
+
+    if (theVertex.getTextureV() != textureV) {
+      return false;
+    }
+    
+    if (theVertex.getIndex() != index) {
+      return false;
+    }
+
+    return true;
   }
 
   // getters & setters

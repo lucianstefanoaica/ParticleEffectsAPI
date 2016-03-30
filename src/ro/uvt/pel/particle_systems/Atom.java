@@ -37,4 +37,12 @@ class Atom extends ParticleSystem {
     }
     return list;
   }
+
+   Vertex getCenter() {
+    return center;
+  }
+
+   void setCenter(Vertex center) {
+    this.center = center;
+  }
 }

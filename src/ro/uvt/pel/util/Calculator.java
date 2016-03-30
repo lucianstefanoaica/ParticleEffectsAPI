@@ -152,6 +152,9 @@ public class Calculator {
   }
 
   public static Vertex generateVertexInCircle(Vertex center, float radius) {
+    if (radius <= 0.2f) {
+      radius = 0.2f;
+    }
     Random rand = new Random();
     float angle = rand.nextFloat() * 2 * (float) Math.PI;
     Vertex pointOnCircle = new Vertex((float) Math.cos(angle), 0.0f, (float) Math.sin(angle));
@@ -165,6 +168,9 @@ public class Calculator {
   }
 
   public static Vertex generateVertexInSphere(Vertex center, float radius) {
+    if (radius <= 0.2f) {
+      radius = 0.2f;
+    }
     Vertex point = null;
     while (true) {
       float x = generateNumberInRange(-radius, radius);

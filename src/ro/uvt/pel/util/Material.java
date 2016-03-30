@@ -28,6 +28,35 @@ public class Material {
     return new Material(ambient.clone(), diffuse.clone(), specular.clone(), shine.clone());
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    Material theMaterial = (Material) obj;
+    for (int i = 0; i < ambient.length; ++i) {
+      if (theMaterial.getAmbient()[i] != ambient[i]) {
+        return false;
+      }
+    }
+
+    for (int i = 0; i < diffuse.length; ++i) {
+      if (theMaterial.getDiffuse()[i] != diffuse[i]) {
+        return false;
+      }
+    }
+
+    for (int i = 0; i < specular.length; ++i) {
+      if (theMaterial.getSpecular()[i] != specular[i]) {
+        return false;
+      }
+    }
+
+    for (int i = 0; i < shine.length; ++i) {
+      if (theMaterial.getShine()[i] != shine[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public void decreaseAlpha(float fadeUnit) {
     ambient[3] -= fadeUnit;
     diffuse[3] -= fadeUnit;

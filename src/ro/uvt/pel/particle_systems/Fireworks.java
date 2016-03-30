@@ -37,4 +37,12 @@ class Fireworks extends ParticleSystem {
     }
     return list;
   }
+
+  List<Vertex> getSources() {
+    return sources;
+  }
+
+  void setSources(List<Vertex> sources) {
+    this.sources = sources;
+  }
 }

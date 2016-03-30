@@ -56,4 +56,28 @@ abstract class ParticleSystem {
       return false;
     }
   }
+
+  Texture getTexture() {
+    return texture;
+  }
+
+  void setTexture(Texture texture) {
+    this.texture = texture;
+  }
+
+  Material getMaterial() {
+    return material;
+  }
+
+  void setMaterial(Material material) {
+    this.material = material;
+  }
+
+  float getFadeQuotient() {
+    return fadeQuotient;
+  }
+
+  void setFadeQuotient(float fadeQuotient) {
+    this.fadeQuotient = fadeQuotient;
+  }
 }

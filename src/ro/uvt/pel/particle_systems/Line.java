@@ -35,4 +35,20 @@ class Line extends ParticleSystem {
     }
     return list;
   }
+
+  Vertex getLeft() {
+    return left;
+  }
+
+  void setLeft(Vertex left) {
+    this.left = left;
+  }
+
+  Vertex getRight() {
+    return right;
+  }
+
+  void setRight(Vertex right) {
+    this.right = right;
+  }
 }

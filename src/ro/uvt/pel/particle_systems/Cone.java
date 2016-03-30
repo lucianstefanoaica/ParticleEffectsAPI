@@ -40,4 +40,28 @@ class Cone extends ParticleSystem {
     }
     return list;
   }
+
+  Vertex getSource() {
+    return source;
+  }
+
+  void setSource(Vertex source) {
+    this.source = source;
+  }
+
+  Vertex getDestination() {
+    return destination;
+  }
+
+  void setDestination(Vertex destination) {
+    this.destination = destination;
+  }
+
+  float getRadius() {
+    return radius;
+  }
+
+  void setRadius(float radius) {
+    this.radius = radius;
+  }
 }
