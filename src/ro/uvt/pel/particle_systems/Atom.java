@@ -26,7 +26,6 @@ class Atom extends ParticleSystem {
         list.add(Calculator.generateVertexOnCircle(type, speedScalar));
       }
     }
-
     return list;
   }
 
@@ -38,11 +37,11 @@ class Atom extends ParticleSystem {
     return list;
   }
 
-   Vertex getCenter() {
+  Vertex getCenter() {
     return center;
   }
 
-   void setCenter(Vertex center) {
+  void setCenter(Vertex center) {
     this.center = center;
   }
 }
